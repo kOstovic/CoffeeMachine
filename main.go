@@ -1,7 +1,7 @@
 package main
 
 import (
-	controllers "coffeShop/controller"
+	controllers "coffeeMachine/controller"
 	"net/http"
 )
 

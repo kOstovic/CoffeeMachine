@@ -1,3 +1,3 @@
-module coffeShop
+module coffeeMachine
 
 go 1.14
