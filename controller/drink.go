@@ -105,6 +105,27 @@ func (dmContoller *drinkController) postAddDrink(w http.ResponseWriter, r *http.
 	encodeResponseAsJSON(drink, w)
 }
 
+// RemoveDrink godoc
+// @Summary Remove drink from machine on given name
+// @Produce json
+// @Success 200, {bool} OK
+// @Router /coffeemachine/drinks?name= [delete]
+func (dmContoller *drinkController) postRemoveDrink(w http.ResponseWriter, r *http.Request) {
+	name, queryFound := r.URL.Query()["name"]
+	if !queryFound || len(name[0]) < 1 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Name for the drink should be provided in name query"))
+		return
+	}
+	OK, err := models.RemoveDrink(name[0])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	encodeResponseAsJSON(OK, w)
+}
+
 func (dmContoller *drinkController) checkDenFromURL(den string, u *url.URL) int {
 	valueStr, queryFound := u.Query()[den]
 	if !queryFound || len(valueStr[0]) < 1 {

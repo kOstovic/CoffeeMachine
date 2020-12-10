@@ -110,13 +110,14 @@ func (imContoller *ingredientsController) putIngredientsByName(w http.ResponseWr
 		w.Write([]byte("Could not parse name or value header request\n"))
 		return
 	}
-	value, err := strconv.Atoi(valueStr[0])
+	value, err := strconv.ParseUint(valueStr[0], 10, 16)
+	valueuint16 := uint16(value)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
 		return
 	}
-	cm, err := models.UpdateIngredienteValueByName(name[0], value)
+	cm, err := models.UpdateIngredientValueByName(name[0], valueuint16)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))

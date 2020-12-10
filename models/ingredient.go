@@ -6,17 +6,16 @@ import (
 )
 
 type Ingredient struct {
-	Water       int
-	Milk        int
-	Sugar       int
-	CoffeeBeans int
-	TeaBeans    int
-	Cups        int
+	Water       uint16
+	Milk        uint16
+	Sugar       uint16
+	CoffeeBeans uint16
+	TeaBeans    uint16
+	Cups        uint16
 }
 
 var (
 	machineIngredients *Ingredient = new(Ingredient)
-	//machineInitialized bool        = false
 )
 
 func GetMachineIngredients() *Ingredient {
@@ -24,8 +23,8 @@ func GetMachineIngredients() *Ingredient {
 }
 
 func InitializeIngredients(ing Ingredient) (Ingredient, error) {
-	if ing.Water <= 0 || ing.Milk <= 0 || ing.Sugar <= 0 ||
-		ing.CoffeeBeans <= 0 || ing.TeaBeans <= 0 || ing.Cups <= 0 {
+	if ing.Water <= 0 && ing.Milk <= 0 && ing.Sugar <= 0 &&
+		ing.CoffeeBeans <= 0 && ing.TeaBeans <= 0 && ing.Cups <= 0 {
 		return Ingredient{}, fmt.Errorf("Initializing CoffeMachine must have some Ingredients to work %v", ing)
 	}
 	machineIngredients = &ing
@@ -65,10 +64,6 @@ func UpdateIngredientPatch(ing Ingredient) (Ingredient, error) {
 }
 
 func UpdateIngredientPut(ing Ingredient) (Ingredient, error) {
-	if ing.Water < 0 || ing.Milk < 0 || ing.Sugar < 0 ||
-		ing.CoffeeBeans < 0 || ing.TeaBeans < 0 || ing.Cups < 0 {
-		return Ingredient{}, fmt.Errorf("Values in Ingredient cannot be negative'%v'", ing)
-	}
 	machineIngredients.Water = ing.Water
 	machineIngredients.Milk = ing.Milk
 	machineIngredients.Sugar = ing.Sugar
@@ -79,10 +74,7 @@ func UpdateIngredientPut(ing Ingredient) (Ingredient, error) {
 	return *machineIngredients, nil
 }
 
-func UpdateIngredienteValueByName(ingredient string, value int) (Ingredient, error) {
-	if value < 0 {
-		return Ingredient{}, fmt.Errorf("Value cannot be negative'%v'", value)
-	}
+func UpdateIngredientValueByName(ingredient string, value uint16) (Ingredient, error) {
 	switch ingredient {
 	case "Water":
 		machineIngredients.Water = value
