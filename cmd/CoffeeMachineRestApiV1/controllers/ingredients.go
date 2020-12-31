@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"coffeeMachine/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
 type ingredientsController struct {

@@ -1,8 +1,9 @@
 package main
 
 import (
-	controllers "coffeeMachine/controller"
 	"net/http"
+
+	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV1/controllers"
 )
 
 func main() {
