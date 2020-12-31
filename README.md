@@ -65,3 +65,17 @@ API is running in localhost:3000
 (port will be customizable in future refactor)
 
 Postman collection can be used for testing.
+
+
+## Docker
+
+Currently building Dockerfile from deployments/apiVersion/Dockerfile
+
+Run BuildDocker.ps1 in api folder to automatically build docker image - if you previously set: Set-ExecutionPolicy unrestricted
+
+Or just run BuildDocker.bat
+
+After that you can run this docker image for example on some other port like this:
+```
+docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv1:0.1
+```
