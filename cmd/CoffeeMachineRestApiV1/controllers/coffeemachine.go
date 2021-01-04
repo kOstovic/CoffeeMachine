@@ -9,7 +9,7 @@ import (
 	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
-type cofeeMachineController struct {
+type coffeeMachineController struct {
 	Ingredients models.Ingredient
 	Money       models.Denomination
 }
@@ -19,11 +19,11 @@ var (
 	machineInitialized bool = false
 )
 
-func newCoffeeMachineController() *cofeeMachineController {
-	return &cofeeMachineController{}
+func newCoffeeMachineController() *coffeeMachineController {
+	return &coffeeMachineController{}
 }
 
-func (cmContoller cofeeMachineController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (cmContoller coffeeMachineController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//w.Write([]byte("Hello from user controller"))
 	if strings.ToLower(r.URL.Path) == "/coffeemachine" || strings.ToLower(r.URL.Path) == "/coffeemachine/" {
 		switch r.Method {
@@ -38,9 +38,9 @@ func (cmContoller cofeeMachineController) ServeHTTP(w http.ResponseWriter, r *ht
 // InitializeMachine godoc
 // @Summary Initialize Machine based on given Ingredient and money json
 // @Produce json
-// @Success 200 {object} cofeeMachineController
+// @Success 200 {object} coffeeMachineController
 // @Router /coffeemachine [post]
-func (cmContoller *cofeeMachineController) postInitializeMachine(w http.ResponseWriter, r *http.Request) {
+func (cmContoller *coffeeMachineController) postInitializeMachine(w http.ResponseWriter, r *http.Request) {
 	if machineInitialized == true {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Machine already Initialized"))
@@ -68,9 +68,9 @@ func (cmContoller *cofeeMachineController) postInitializeMachine(w http.Response
 	encodeResponseAsJSON(fmt.Sprintf("%#v %#v", cm, mm), w)
 }
 
-func (cmContoller *cofeeMachineController) parseRequest(r *http.Request) (models.Ingredient, models.Denomination, error) {
+func (cmContoller *coffeeMachineController) parseRequest(r *http.Request) (models.Ingredient, models.Denomination, error) {
 	dec := json.NewDecoder(r.Body)
-	var ing cofeeMachineController
+	var ing coffeeMachineController
 	err := dec.Decode(&ing)
 
 	if err != nil {
