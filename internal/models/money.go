@@ -131,7 +131,7 @@ func CheckPrereqForMoney(d Denomination, cost float64) (bool, Denomination, Deno
 	} else if d.Total < cost {
 		return false, Denomination{}, d, fmt.Errorf("Drink cost %v. Not enough money", cost)
 	} else {
-		fmt.Printf("%#v", d.Total-cost)
+		//fmt.Printf("%#v", d.Total-cost)
 		prereq, aDen := cashierAlgorithmCheck(d.Total-cost, d)
 		if prereq {
 			return true, Denomination{d.Half - aDen.Half, d.One - aDen.One, d.Two - aDen.Two, d.Five - aDen.Five, d.Ten - aDen.Ten, 0}, aDen, nil

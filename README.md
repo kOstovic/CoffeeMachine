@@ -53,11 +53,11 @@ Denomination struct {
 	Total float64
 }
 ```
-## Running
+## Running CoffeeMachineRestApiV1
 
-Run command 
+Run command in cmd/CoffeeMachineRestApiV1
 ```
-go build coffeeMachine
+go build -o coffeeMachine.exe main.go
 ```
 and run coffeeMachine.exe
 
@@ -66,10 +66,20 @@ API is running in localhost:3000
 
 Postman collection can be used for testing.
 
+## Running CoffeeMachineConsoleV1
+
+Run command in cmd/CoffeeMachineConsoleV1
+```
+go build -o coffeeMachine.exe main.go
+```
+and run coffeeMachine.exe
+
+APP is running in local a console, commands are shown in console 
+and example jsons for commands can be taken from postman collection
 
 ## Docker
 
-Currently building Dockerfile from deployments/apiVersion/Dockerfile
+Currently, building Dockerfile from deployments/apiVersion/Dockerfile
 
 Run BuildDocker.ps1 in api folder to automatically build docker image - if you previously set: Set-ExecutionPolicy unrestricted
 
@@ -77,5 +87,5 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv1:0.1
+docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv1
 ```
