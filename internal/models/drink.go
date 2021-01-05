@@ -1,6 +1,8 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Drink struct {
 	Water       uint16
@@ -18,6 +20,14 @@ var (
 
 func GetAvailableDrinks() map[string]Drink {
 	return drinks
+}
+
+func GetAvailableDrinksName() []string {
+	drinksNameArr := make([]string, 0, len(drinks))
+	for key := range drinks {
+		drinksNameArr = append(drinksNameArr, key)
+	}
+	return drinksNameArr
 }
 
 func GetDrinkByName(name string) Drink {
