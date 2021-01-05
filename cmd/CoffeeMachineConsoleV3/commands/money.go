@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/abiosoft/ishell"
 	"github.com/kOstovic/CoffeeMachine/internal/models"
 	"os"
 )
@@ -20,41 +21,65 @@ func newMoneyCommand() *moneyCommand {
 	return &moneyCommand{}
 }
 
-func (mmCommand moneyCommand) ServeCommand() {
-	fmt.Println("money command. available commands are: getAllAvailableDenomination, getDenominationByName, putDenomination, putDenominationByName, patchDenomination, end")
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-
-		switch scanner.Text() {
-		case "getAllAvailableDenomination":
-			fmt.Println("Entering getAllAvailableDenomination subroutine.")
-			getAllAvailableDenomination()
-			break
-		case "getDenominationByName":
-			fmt.Println("Entering getDenominationByName subroutine.")
-			getDenominationByName()
-			break
-		case "putDenomination":
-			fmt.Println("Entering putDenomination subroutine.")
-			putDenomination()
-			break
-		case "putDenominationByName":
-			fmt.Println("Entering putDenominationByName subroutine.")
-			putDenominationByName()
-			break
-		case "patchDenomination":
-			fmt.Println("Entering patchDenomination subroutine.")
-			patchDenomination()
-			break
-		case "end":
-			fmt.Println("end command. Exiting subroutine.")
-			return
-			break
-		default:
-			println("Invalid command. Commands are: getAllAvailableDenomination, getDenominationByName, putDenomination, putDenominationByName, patchDenomination, end")
-		}
-		fmt.Println("drink command. available commands are: getAllAvailableDenomination, getDenominationByName, putDenomination, putDenominationByName, patchDenomination, end")
+func (mmCommand moneyCommand) addCommands(shell ishell.Shell) {
+	money := &ishell.Cmd{
+		Name: "money",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			initializeCoffeeMachine()
+		},
+		Help: "money subcommand, available commands are: getAllAvailableDenomination, getDenominationByName, putDenomination, putDenominationByName, patchDenomination",
 	}
+
+	money.AddCmd(&ishell.Cmd{
+		Name: "getAllAvailableDenomination",
+		Aliases: []string{"getDenominations", "denominations"},
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			getAllAvailableDenomination()
+		},
+		Help: "Get current status of all denominations",
+	})
+	money.AddCmd(&ishell.Cmd{
+		Name: "getDenominationByName",
+		Aliases: []string{"getDenomination"},
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			getDenominationByName()
+		},
+		Help: "Get Denomination by name",
+	})
+	money.AddCmd(&ishell.Cmd{
+		Name: "putDenomination",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			putDenomination()
+		},
+		Help: "Add new set of Denominations",
+	})
+	money.AddCmd(&ishell.Cmd{
+		Name: "putDenominationByName",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			putDenominationByName()
+		},
+		Help: "Update only one Denomination",
+	})
+	money.AddCmd(&ishell.Cmd{
+		Name: "patchDenomination",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			patchDenomination()
+		},
+		Help: "Update some Denominations, missing ones will be left the same",
+	})
+	shell.AddCmd(money)
 }
 
 func getAllAvailableDenomination(){

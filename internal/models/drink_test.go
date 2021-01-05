@@ -129,6 +129,16 @@ func TestGetAvailableDrinks(t *testing.T) {
 	})
 }
 
+func TestGetAvailableDrinksName(t *testing.T) {
+	testnameDrink = fmt.Sprintf("%s", "GetAllDrinkNames")
+	t.Run(testnameDrink, func(t *testing.T) {
+		result := GetAvailableDrinksName()
+		if len(result) != 8 {
+			t.Errorf("DrinkNames should exist and there should be 8 of them, result = %v", result)
+		}
+	})
+}
+
 func TestCheckPrereqForDrink(t *testing.T) {
 	var testsError = []struct {
 		name   string

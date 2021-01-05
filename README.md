@@ -1,18 +1,29 @@
 # CoffeeMachine
-CoffeeMachine Rest API implementation in GoLang used for learning GoLang.
+CoffeeMachine Rest API and Console APP implementation in GoLang used for learning GoLang.
 
-## Endpoints
-CoffeeMachine has endpoint:
+## Endpoints and Commands
+#### Endpoints REST API version CoffeeMachine has endpoint:
 >
 > - for initializing
-	/coffeemachine 
+>  - /coffeemachine
 > - for checking status of ingredient and updating Ingredient model
-	/coffeemachine/ingredient 
+>  - /coffeemachine/ingredient
 > - for checking status of money and updating money based on Denomination model    
-    /coffeemachine/money 
+>  - /coffeemachine/money
 > - for checking all available drinks, adding them and consuming them   
-	/coffeemachine/drinks 
+>  - /coffeemachine/drinks
 
+#### Console APP version CoffeeMachine has command structure:
+
+>
+> - for initializing 
+>  - coffeemachine subcommand
+> - for checking status of ingredient and updating Ingredient model
+>  - ingredient subcommand
+> - for checking status of money and updating money based on Denomination model    
+>  - money subcommand
+> - for checking all available drinks, adding them and consuming them   
+>  - drinks subcommand
 
 ## Models
 ```
@@ -61,21 +72,22 @@ go build -o coffeeMachine.exe main.go
 ```
 and run coffeeMachine.exe
 
-API is running in localhost:3000 
+API is running in localhost:3000
 (port will be customizable in future refactor)
 
 Postman collection can be used for testing.
 
-## Running CoffeeMachineConsoleV1
+## Running CoffeeMachineConsole
 
-Run command in cmd/CoffeeMachineConsoleV1
+Run command in cmd/CoffeeMachineConsoleV1 or cmd/CoffeeMachineConsoleV3
 ```
 go build -o coffeeMachine.exe main.go
 ```
 and run coffeeMachine.exe
 
-APP is running in local a console, commands are shown in console 
+APP is running in local a console, commands are shown in console (or from help command in v3)
 and example jsons for commands can be taken from postman collection
+
 
 ## Docker
 

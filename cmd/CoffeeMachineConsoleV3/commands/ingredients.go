@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/abiosoft/ishell"
 	"github.com/kOstovic/CoffeeMachine/internal/models"
 	"os"
 )
@@ -19,41 +20,65 @@ type ingredientByName struct {
 func newIngredientsCommand() *ingredientsCommand {
 	return &ingredientsCommand{}
 }
-func (imCommand ingredientsCommand) ServeCommand() {
-	fmt.Println("ingredients command. available commands are: getAllIngredients, getIngredientsByName, putIngredients, putIngredientsByName, patchIngredients, end")
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-
-		switch scanner.Text() {
-		case "getAllIngredients":
-			fmt.Println("Entering getAllIngredients subroutine.")
-			getAllIngredients()
-			break
-		case "getIngredientsByName":
-			fmt.Println("Entering getIngredientsByName subroutine.")
-			getIngredientsByName()
-			break
-		case "putIngredients":
-			fmt.Println("Entering putIngredients subroutine.")
-			putIngredients()
-			break
-		case "putIngredientsByName":
-			fmt.Println("Entering putIngredientsByName subroutine.")
-			putIngredientsByName()
-			break
-		case "patchIngredients":
-			fmt.Println("Entering patchIngredients subroutine.")
-			patchIngredients()
-			break
-		case "end":
-			fmt.Println("end command. Exiting subroutine.")
-			return
-			break
-		default:
-			println("Invalid command. Commands are: getAllIngredients, getIngredientsByName, putIngredients, putIngredientsByName, patchIngredients, end")
-		}
-		fmt.Println("drink command. available commands are: getAllIngredients, getIngredientsByName, putIngredients, putIngredientsByName, patchIngredients, end")
+func (imCommand ingredientsCommand) addCommands(shell ishell.Shell) {
+	ingredient := &ishell.Cmd{
+		Name: "ingredient",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			initializeCoffeeMachine()
+		},
+		Help: "ingredient subcommand, available commands are: getAllIngredients, getIngredientsByName, putIngredients, putIngredientsByName, patchIngredients",
 	}
+
+	ingredient.AddCmd(&ishell.Cmd{
+		Name: "getAllIngredients",
+		Aliases: []string{"getIngredients", "ingredients"},
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			getAllIngredients()
+		},
+		Help: "Get current status of all ingredients",
+	})
+	ingredient.AddCmd(&ishell.Cmd{
+		Name: "getIngredientsByName",
+		Aliases: []string{"getIngredient"},
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			getIngredientsByName()
+		},
+		Help: "Get Ingredients by name",
+	})
+	ingredient.AddCmd(&ishell.Cmd{
+		Name: "putIngredients",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			putIngredients()
+		},
+		Help: "Add new set of Ingredients",
+	})
+	ingredient.AddCmd(&ishell.Cmd{
+		Name: "putIngredientsByName",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			putIngredientsByName()
+		},
+		Help: "Update only one Ingredient",
+	})
+	ingredient.AddCmd(&ishell.Cmd{
+		Name: "patchIngredients",
+		Func: func(c *ishell.Context) {
+			c.ShowPrompt(false)
+			defer c.ShowPrompt(true)
+			patchIngredients()
+		},
+		Help: "Update some Ingredients, missing ones will be left the same",
+	})
+	shell.AddCmd(ingredient)
 }
 
 func getAllIngredients(){
