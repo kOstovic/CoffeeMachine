@@ -1,5 +1,5 @@
 # CoffeeMachine
-CoffeeMachine application implementation in GoLang used for learning GoLang.
+CoffeeMachine application implementation in GoLang used for learning GoLang using abiosoft/ishell for interactive shell.
 
 ## Running CoffeeMachineConsoleV3
 
