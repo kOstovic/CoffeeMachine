@@ -18,7 +18,6 @@ func newIngredientsController() *ingredientsController {
 }
 
 func (imContoller ingredientsController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	//w.Write([]byte("Hello from ingredients controller"))
 	if strings.ToLower(r.URL.Path) == "/coffeemachine/ingredients" || strings.ToLower(r.URL.Path) == "/coffeemachine/ingredients/" {
 		switch r.Method {
 		case http.MethodGet:
@@ -49,8 +48,9 @@ func (imContoller ingredientsController) ServeHTTP(w http.ResponseWriter, r *htt
 
 // getAllIngredients godoc
 // @Summary Get all ingredients available
+// @Description Get all ingredients available
 // @Produce json
-// @Success 200 {object} {string: models.Ingredients}
+// @Success 200 {array} models.Ingredient
 // @Router /coffeemachine/ingredients [get]
 func (imContoller *ingredientsController) getAllIngredients(w http.ResponseWriter, r *http.Request) {
 	encodeResponseAsJSON(models.GetMachineIngredients(), w)
@@ -58,8 +58,11 @@ func (imContoller *ingredientsController) getAllIngredients(w http.ResponseWrite
 
 // getIngredientsByName godoc
 // @Summary Get ingredient by name from query
+// @Description Get ingredient by name from query
+// @Param name query string false "name of ingredient to get"
 // @Produce json
-// @Success 200 {object} models.Ingredients.Field
+// @Success 200 {object} models.Ingredient
+// @Failure 400,404
 // @Router /coffeemachine/ingredients?name= [get]
 func (imContoller *ingredientsController) getIngredientsByName(w http.ResponseWriter, r *http.Request) {
 	name, queryFound := r.URL.Query()["name"]
@@ -79,8 +82,13 @@ func (imContoller *ingredientsController) getIngredientsByName(w http.ResponseWr
 
 // putIngredients godoc
 // @Summary Update ingredients based on given Ingredient json, updates all
+// @Description Update ingredients based on given Ingredient json, updates all
+// @Param ingredient body Ingredient false "Update Ingredient object with Put option"
+// @Accept json
 // @Produce json
-// @Success 200 {object} model.Ingredient
+// @Success 200 {object} models.Ingredient
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine/ingredients [put]
 func (imContoller *ingredientsController) putIngredients(w http.ResponseWriter, r *http.Request) {
 	cm, err := imContoller.parseRequest(r)
@@ -99,9 +107,15 @@ func (imContoller *ingredientsController) putIngredients(w http.ResponseWriter, 
 }
 
 // putIngredientsByName godoc
-// @Summary Update ingredients based on given Ingredient name and value in query
+// @Summary Update ingredients based on given Ingredient name and value in query or update all from body
+// @Description Update ingredients based on given Ingredient name and value in query or update all from body
+// @Param name query string false "name of ingredient to change"
+// @Param value query int false "value of ingredient to change"
+// @Param ingredient body Ingredient false "Update Ingredient object with Put option"
 // @Produce json
-// @Success 200 {object} model.Ingredient
+// @Success 200 {object} models.Ingredient
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine/ingredients?name=&value [put]
 func (imContoller *ingredientsController) putIngredientsByName(w http.ResponseWriter, r *http.Request) {
 	name, queryNameFound := r.URL.Query()["name"]
@@ -129,8 +143,13 @@ func (imContoller *ingredientsController) putIngredientsByName(w http.ResponseWr
 
 // patchIngredients godoc
 // @Summary Update ingredients based on given Ingredient json, update only given
+// @Description Update ingredients based on given Ingredient json, update only given
+// @Param ingredient body Ingredient true "Update Ingredient object with Patch option"
+// @Accept json
 // @Produce json
-// @Success 200 {object} model.Ingredient
+// @Success 200 {object} models.Ingredient
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine/ingredients [patch]
 func (imContoller *ingredientsController) patchIngredients(w http.ResponseWriter, r *http.Request) {
 	cm, err := imContoller.parseRequest(r)

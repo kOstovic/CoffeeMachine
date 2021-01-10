@@ -19,7 +19,6 @@ func newDrinkController() *drinkController {
 }
 
 func (dmContoller drinkController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	//w.Write([]byte("Hello from user controller"))
 	if strings.ToLower(r.URL.Path) == "/coffeemachine/drinks" || strings.ToLower(r.URL.Path) == "/coffeemachine/drinks/" {
 		switch r.Method {
 		case http.MethodGet:
@@ -39,17 +38,27 @@ func (dmContoller drinkController) ServeHTTP(w http.ResponseWriter, r *http.Requ
 
 // getAllAvailableDrinks godoc
 // @Summary Get all drinks available
-// @Produce json array
-// @Success 200 {object} {string: models.drink}
+// @Description Get all drinks available
+// @Produce application/json
+// @Success 200 {array} models.Drink
 // @Router /coffeemachine/drinks [get]
 func (dmContoller *drinkController) getAllAvailableDrinks(w http.ResponseWriter, r *http.Request) {
 	encodeResponseAsJSON(models.GetAvailableDrinks(), w)
 }
 
 // ConsumeDrink godoc
-// @Summary Consumes Dring over GET on /coffeemachine/drinks
-// @Produce json
+// @Summary Consumes Drink over
+// @Description Consumes Drink over
+// @Param name query string true "Name of drink to consume"
+// @Param Half query string false "Denomination Half to consume"
+// @Param One query string false "Denomination One to consume"
+// @Param Two query string false "Denomination Two to consume"
+// @Param Five query string false "Denomination Five to consume"
+// @Param Ten query string false "Denomination Ten to consume"
+// @Produce application/json
 // @Success 200 {object} models.Denomination
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine/drinks?name [get]
 func (dmContoller *drinkController) getConsumeDrink(w http.ResponseWriter, r *http.Request) {
 	name, queryFound := r.URL.Query()["name"]
@@ -81,8 +90,14 @@ func (dmContoller *drinkController) getConsumeDrink(w http.ResponseWriter, r *ht
 
 // AddDrink godoc
 // @Summary Initialize new drink to consume on given Drink json
+// @Description Initialize new drink to consume on given Drink json
+// @Param name query string true "name of drink to create"
+// @Param Drink body Drink true "Add Drink object"
+// @Accept  json
 // @Produce json
-// @Success 200 {object} model.Drink
+// @Success 200 {object} models.Drink
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine/drinks?name= [post]
 func (dmContoller *drinkController) postAddDrink(w http.ResponseWriter, r *http.Request) {
 	name, queryFound := r.URL.Query()["name"]
@@ -108,8 +123,12 @@ func (dmContoller *drinkController) postAddDrink(w http.ResponseWriter, r *http.
 
 // RemoveDrink godoc
 // @Summary Remove drink from machine on given name
+// @Description Remove drink from machine on given name
+// @Param name query string true "name of drink to delete"
 // @Produce json
-// @Success 200, {bool} OK
+// @Success 200 {object} bool
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine/drinks?name= [delete]
 func (dmContoller *drinkController) postRemoveDrink(w http.ResponseWriter, r *http.Request) {
 	name, queryFound := r.URL.Query()["name"]

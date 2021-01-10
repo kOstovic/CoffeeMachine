@@ -18,7 +18,6 @@ func newMoneyController() *moneyController {
 }
 
 func (mmContoller moneyController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	//w.Write([]byte("Hello from user controller"))
 	if strings.ToLower(r.URL.Path) == "/coffeemachine/money" || strings.ToLower(r.URL.Path) == "/coffeemachine/money/" {
 		switch r.Method {
 		case http.MethodGet:
@@ -46,8 +45,9 @@ func (mmContoller moneyController) ServeHTTP(w http.ResponseWriter, r *http.Requ
 
 // getAllAvailableDenomination godoc
 // @Summary Get all denominations available
+// @Description Get all denominations available
 // @Produce json
-// @Success 200 {object} models.Denominationm
+// @Success 200 {object} models.Denomination
 // @Router /coffeemachine/money [get]
 func (mmContoller *moneyController) getAllAvailableDenomination(w http.ResponseWriter, r *http.Request) {
 	encodeResponseAsJSON(models.GetCurrentMoney(), w)
@@ -55,8 +55,11 @@ func (mmContoller *moneyController) getAllAvailableDenomination(w http.ResponseW
 
 // getDenominationByName godoc
 // @Summary Get denominations by name from query
+// @Description Get denominations by name from query
+// @Param name query string false "name of denomination to get"
 // @Produce json
-// @Success 200 {object} models.Denomination.Field
+// @Success 200 {object} models.Denomination
+// @Failure 400,404
 // @Router /coffeemachine/money?name= [get]
 func (mmContoller *moneyController) getDenominationByName(w http.ResponseWriter, r *http.Request) {
 	//name := r.Header.Get("denomination")
@@ -77,9 +80,14 @@ func (mmContoller *moneyController) getDenominationByName(w http.ResponseWriter,
 
 // putDenomination godoc
 // @Summary Update Denomination based on given Denomination json, updates all
+// @Description Update Denomination based on given Denomination json, updates all
+// @Param denomination body Denomination true "Update Denomination object with Put option"
+// @Accept json
 // @Produce json
-// @Success 200 {object} model.Denomination
-// @Router /coffeemachine/denomination [put]
+// @Success 200 {object} models.Denomination
+// @Failure 400,404
+// @Failure 500
+// @Router /coffeemachine/money [put]
 func (mmContoller *moneyController) putDenomination(w http.ResponseWriter, r *http.Request) {
 	cm, err := mmContoller.parseRequestDenomination(r)
 	if err != nil {
@@ -97,10 +105,16 @@ func (mmContoller *moneyController) putDenomination(w http.ResponseWriter, r *ht
 }
 
 // putDenominationByName godoc
-// @Summary Update denomination based on given Denomination name and value in query
+// @Summary Update denomination based on given Denomination name and value in query or update all from body
+// @Description Update denomination based on given Denomination name and value in query or update all from body
+// @Param name query string false "name of denomination to change"
+// @Param value query int false "value of denomination to change"
+// @Param denomination body Denomination false "Update Denomination object with Put option"
 // @Produce json
-// @Success 200 {object} model.Denomination
-// @Router /coffeemachine/denomination?name=&value [put]
+// @Success 200 {object} models.Denomination
+// @Failure 400,404
+// @Failure 500
+// @Router /coffeemachine/money?name=&value [put]
 func (mmContoller *moneyController) putDenominationByName(w http.ResponseWriter, r *http.Request) {
 	name, queryNameFound := r.URL.Query()["name"]
 	valueStr, queryValueFound := r.URL.Query()["value"]
@@ -124,11 +138,16 @@ func (mmContoller *moneyController) putDenominationByName(w http.ResponseWriter,
 	encodeResponseAsJSON(cm, w)
 }
 
-// patchIngredients godoc
-// @Summary Update ingredients based on given Ingredient json, update only given
+// patchDenomination godoc
+// @Summary Update ingredients based on given Denomination json, update only given
+// @Description Update ingredients based on given Denomination json, update only given
+// @Param denomination body Denomination true "Update Denomination object with Patch option"
+// @Accept json
 // @Produce json
-// @Success 200 {object} model.Ingredient
-// @Router /coffeemachine/ingredients [patch]
+// @Success 200 {object} models.Ingredient
+// @Failure 400,404
+// @Failure 500
+// @Router /coffeemachine/money [patch]
 func (mmContoller *moneyController) patchDenomination(w http.ResponseWriter, r *http.Request) {
 	cm, err := mmContoller.parseRequestDenomination(r)
 	if err != nil {

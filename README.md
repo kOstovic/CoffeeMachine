@@ -12,6 +12,7 @@ CoffeeMachine Rest API and Console APP implementation in GoLang used for learnin
 >  - /coffeemachine/money
 > - for checking all available drinks, adding them and consuming them   
 >  - /coffeemachine/drinks
+> -  /coffeemachine/swagger/index.html swagger endpoint in restAPIv2
 
 #### Console APP version CoffeeMachine has command structure:
 
@@ -64,9 +65,10 @@ Denomination struct {
 	Total float64
 }
 ```
-## Running CoffeeMachineRestApiV1
+## Running CoffeeMachineRestApi
 
-Run command in cmd/CoffeeMachineRestApiV1
+Same is for CoffeeMachineRestApiV1 and CoffeeMachineRestApiV2
+Run command in cmd/CoffeeMachineRestApi
 ```
 go build -o coffeeMachine.exe main.go
 ```
@@ -75,7 +77,7 @@ and run coffeeMachine.exe
 API is running in localhost:3000
 (port will be customizable in future refactor)
 
-Postman collection can be used for testing.
+Postman collection can be used for testing or just go to swagger endpoint in CoffeeMachineRestApiV2.
 
 ## Running CoffeeMachineConsole
 
@@ -99,5 +101,6 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv1
+docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv2.0
 ```
+restapiv2.0 is running in production mode by default
