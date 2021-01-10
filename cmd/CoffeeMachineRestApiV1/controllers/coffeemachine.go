@@ -34,11 +34,15 @@ func (cmContoller coffeeMachineController) ServeHTTP(w http.ResponseWriter, r *h
 		}
 	}
 }
-
 // InitializeMachine godoc
 // @Summary Initialize Machine based on given Ingredient and money json
+// @Description Initialize Machine based on given Ingredient and money json
+// @Param CoffeeMachine body CoffeeMachine true "init CoffeeMachine object"
+// @Accept json
 // @Produce json
 // @Success 200 {object} coffeeMachineController
+// @Failure 400,404
+// @Failure 500
 // @Router /coffeemachine [post]
 func (cmContoller *coffeeMachineController) postInitializeMachine(w http.ResponseWriter, r *http.Request) {
 	if machineInitialized == true {
