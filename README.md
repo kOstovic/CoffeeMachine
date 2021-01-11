@@ -108,16 +108,9 @@ restapiv2.0 is running in production mode by default
 ## Docker Compose
 
 Docker Compose file is set in deployment/DockerCompose
-Edit .env file to change variables from docker-compose file and then to run in detached mode run:
+Edit .env file to change variables from docker-compose file and then to run in detached mode run first command and to stop second command:
 ```
 docker-compose up -d
+docker-compose down
 ```
-to start service coffeemachine. New docker compose command from new docker cli is in experimental stage and still is not fully working so stick to docker-compose command.
-
-Variables and their defaults are:
-```
-COFFEEMACHINE_IMAGE=github.com/kostovic/coffeemachine
-COFFEEMACHINE_TAG=restapiv2.0
-COFFEEMACHINE_HTTP_PORT=3000
-GIN_MODE=release
-```
+More in README.md in DockerCompose folder
