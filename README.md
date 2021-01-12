@@ -104,3 +104,24 @@ After that you can run this docker image for example on some other port like thi
 docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv2.0
 ```
 restapiv2.0 is running in production mode by default
+
+## Docker Compose
+
+Docker Compose file is set in deployment/DockerCompose
+Edit .env file to change variables from docker-compose file and then to run in detached mode run first command and to stop second command:
+```
+docker-compose up -d
+docker-compose down
+```
+More in README.md in DockerCompose folder
+
+## HELM chart
+
+CoffeeMachineChart is Kubernetes set of yamls with own rules how to deploy to local or external cluster. Edit HELM/CoffeeMachineChart/values.yaml for more options and run or delete release with:
+
+```
+helm install my-release .
+helm delete my-release
+```
+
+More in README.md in HELM/CoffeeMachineChart folder
