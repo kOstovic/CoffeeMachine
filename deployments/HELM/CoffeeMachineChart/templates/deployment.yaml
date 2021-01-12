@@ -20,7 +20,7 @@ spec:
       labels:
         {{- include "CoffeeMachine.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.image.pullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -28,6 +28,8 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env: 
             {{- range $key, $value := .Values.deployment.env }}
             - name: {{ $key }}
@@ -35,15 +37,34 @@ spec:
             {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
+          volumeMounts:
+          {{- if .Values.volumes.useEmptyDir }}
+          - name: cache-volume
+            mountPath: {{.Values.volumes.emptyDirPath }}
+          {{- end }}
+          {{- if .Values.volumes.useVolumes }}
+          - name: {{ .Values.volumes.PVName }}
+            mountPath: {{ .Values.volumes.mountPVCPath }}
+            subPath: {{ .Values.volumes.subPVCPath }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      {{- if .Values.volumes.useEmptyDir }}
+      - name: cache-volume
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.volumes.usePVC }}
+      - name: {{ .Values.volumes.PVName }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.volumes.PVName }}
       {{- end }}

@@ -8,8 +8,7 @@ image:
   repository: github.com/kostovic/coffeemachine
   tag: "restapiv2.0"
   pullPolicy: IfNotPresent
-
-imagePullSecrets: []
+  pullSecrets: []
 podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
@@ -25,6 +24,16 @@ securityContext: {}
 deployment:
   env:
     GIN_MODE: "release"
+
+volumes:
+#EmptyDir shares a temporary directory that shares a pod's lifetime: saves data if restart occurs and can be used for log rotation folder or H2 database storage
+  useEmptyDir: false
+  emptyDirPath: ""
+#PVC has data, independant of container and needs to have volumeClaimName first which goes to PVName
+  usePVC: false
+  PVName: ""
+  mountPVCPath: ""
+  subPVCPath: ""
 
 service:
 #Use NodePort to expose at random port at 30000+ but not on localmachine name
@@ -46,7 +55,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-#Recommended values in requests part
+#Recommended values in requests part after heavy usage and logs enabled (and saved to emptyDir in rotation)
 resources: 
    limits:
      cpu: 50m
@@ -54,6 +63,5 @@ resources:
    requests:
      cpu: 10m
      memory: 64Mi
-
 
 nodeSelector: {}
