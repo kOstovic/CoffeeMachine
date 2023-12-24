@@ -27,6 +27,10 @@ CoffeeMachine Rest API and Console APP implementation in GoLang used for learnin
 >  - drinks subcommand
 
 ## Models
+
+Models have tests inside their folder/package which can be run with command:
+go test internal\models
+
 ```
 //model used for initializing machine
 cofeeMachineController struct {
