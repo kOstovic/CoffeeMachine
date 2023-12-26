@@ -28,12 +28,14 @@ jobs:
           cp -R cmd/CoffeeMachineRestApiV2 deployments/CoffeeMachineRestApiV2/CoffeeMachine\cmd\CoffeeMachineRestApiV2
           cp go.mod deployments/CoffeeMachineRestApiV2/CoffeeMachine
           cp go.sum deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          pwd && ls -alh
       - name: Build Docker image
         uses: docker/build-push-action@v5.1.0
         with:
           # Build's context is the set of files located in the specified PATH or URL
-          context: ./deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          #context: ./deployments/CoffeeMachineRestApiV2/CoffeeMachine
           # Path to the Dockerfile
+          build-args: --progress=plain
           file: ./deployments/CoffeeMachineRestApiV2/Dockerfile
           # List of tags
           tags: ${{ env.VERSION }}.${{github.run_number}}
