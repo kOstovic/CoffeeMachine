@@ -4,6 +4,7 @@ WORKDIR /go/src/github.com/kOstovic/CoffeeMachine
 COPY . ..
 ENV CGO_ENABLED=0
 RUN go mod download
+RUN pwd && ls -alh
 RUN go build -o /bin/coffeemachine cmd/CoffeeMachineRestApiV2/main.go 
 
 FROM scratch
