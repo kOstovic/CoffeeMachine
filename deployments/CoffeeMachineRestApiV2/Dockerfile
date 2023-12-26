@@ -6,7 +6,7 @@ RUN pwd && ls -alh -R
 COPY . ..
 ENV CGO_ENABLED=0
 RUN go mod download
-RUN pwd && ls -alh -R
+RUN ls -alh -R /go/src/github.com/kOstovic/
 RUN go build -o /bin/coffeemachine cmd/CoffeeMachineRestApiV2/main.go 
 
 FROM scratch
