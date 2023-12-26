@@ -1,5 +1,6 @@
 FROM golang:1.21.5-alpine AS build
 
+RUN pwd && ls -alh -R
 WORKDIR /go/src/github.com/kOstovic/CoffeeMachine
 RUN pwd && ls -alh -R
 COPY . ..
