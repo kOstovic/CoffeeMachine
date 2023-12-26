@@ -23,14 +23,12 @@ jobs:
         run: go test ./internal/models
       - name: Create build directory
         run : |
-          pwd && ls -alh -R
           mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine
           mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd
           cp -R internal deployments/CoffeeMachineRestApiV2/CoffeeMachine/internal
           cp -R cmd/CoffeeMachineRestApiV2 deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd/CoffeeMachineRestApiV2
           cp go.mod deployments/CoffeeMachineRestApiV2/CoffeeMachine
           cp go.sum deployments/CoffeeMachineRestApiV2/CoffeeMachine
-          pwd && ls -alh -R
       - name: Build Docker image
         uses: docker/build-push-action@v5.1.0
         with:
@@ -40,5 +38,5 @@ jobs:
           build-args: --progress=plain
           file: ./deployments/CoffeeMachineRestApiV2/Dockerfile
           # List of tags
-          tags: ${{ env.VERSION }}.${{github.run_number}}
+          tags: github.com/kostovic/coffeemachine/restapiv2:${{ env.VERSION }}.${{github.run_number}}
 
