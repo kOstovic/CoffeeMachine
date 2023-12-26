@@ -3,12 +3,13 @@ package controllers
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/kOstovic/CoffeeMachine/internal/models"
-	"log"
-	"net/http"
+	log "github.com/sirupsen/logrus"
 )
 
 type Denomination struct {
@@ -51,6 +52,7 @@ func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 // @Router / [post]
 func postInitializeMachine(c *gin.Context) {
 	if machineInitialized == true {
+		log.Errorf("coffeeMachine cannot be initialized more than once")
 		c.JSON(http.StatusBadRequest, "Machine already Initialized")
 		return
 	}
@@ -58,26 +60,30 @@ func postInitializeMachine(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Errorf("coffeeMachine could not be initialized " + err.Error())
 		return
 	}
 	cm, errIng := models.InitializeIngredients(iModel)
 	if errIng != nil {
 		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object "+err.Error())
+		log.Errorf("coffeeMachine could not be initialized " + err.Error())
 		return
 	}
 	mm, errDen := models.InitializeDenominations(mModel)
 	if errDen != nil {
 		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object "+err.Error())
+		log.Errorf("coffeeMachine could not be initialized " + err.Error())
 		return
 	}
 	machineInitialized = true
+	log.Infof("coffeeMachine initialized with following parameters: Ingredients: %v Money: %v", cm, mm)
 	c.JSON(http.StatusOK, fmt.Sprintf("Ingredients: %v Money: %v", cm, mm))
 }
 
 func checkCoffeeMachineFromReq(c *gin.Context) (models.Ingredient, models.Denomination, error) {
 	var coffeeMachine CoffeeMachine
 	if c.ShouldBindJSON(&coffeeMachine) == nil {
-		log.Println("====== Bind By JSON ======")
+		log.Debugf("====== Bind By JSON ====== from request %v", coffeeMachine)
 		return models.Ingredient{Water: coffeeMachine.Ingredients.Water,
 				Milk: coffeeMachine.Ingredients.Milk, Sugar: coffeeMachine.Ingredients.Sugar,
 				CoffeeBeans: coffeeMachine.Ingredients.CoffeeBeans, TeaBeans: coffeeMachine.Ingredients.TeaBeans,
@@ -86,6 +92,7 @@ func checkCoffeeMachineFromReq(c *gin.Context) (models.Ingredient, models.Denomi
 				One: coffeeMachine.Denomination.One, Two: coffeeMachine.Denomination.Two,
 				Five: coffeeMachine.Denomination.Five, Ten: coffeeMachine.Denomination.Ten}, nil
 	} else {
+		log.Warnf("coffeeMachine could not be parsed from request %v", coffeeMachine)
 		return models.Ingredient{}, models.Denomination{}, fmt.Errorf("coffeeMachine could not be parsed or validation failed - check your values again")
 	}
 }

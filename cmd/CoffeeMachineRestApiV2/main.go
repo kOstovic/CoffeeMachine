@@ -1,12 +1,16 @@
 package main
 
 import (
+	"net/http"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/controllers"
 	_ "github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/docs"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	log "github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
-	"net/http"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title CoffeeMachine Swagger API
@@ -22,9 +26,24 @@ import (
 // @BasePath /coffeemachine
 // Package classification of Product API.
 func main() {
+
+	lvl, ok := os.LookupEnv("LOG_LEVEL")
+	// LOG_LEVEL not set, let's default to debug
+	if !ok {
+		lvl = "debug"
+	}
+	ll, err := log.ParseLevel(lvl)
+	if err != nil {
+		ll = log.DebugLevel
+	}
+	// set global log level
+	log.SetLevel(ll)
+
 	router := gin.Default()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	coffeemachine := router.Group("/coffeemachine")
 	controllers.RegisterRoutesCoffeeMachine(coffeemachine.Group("/"))
 	controllers.RegisterRoutesDrink(coffeemachine.Group("/drinks"))

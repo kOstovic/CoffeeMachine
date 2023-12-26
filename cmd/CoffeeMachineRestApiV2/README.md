@@ -14,9 +14,9 @@ CoffeeMachine has endpoint:
 >  - /coffeemachine/drinks
 > -  /coffeemachine/swagger/index.html swagger endpoint in restAPIv2
 
-## Running CoffeeMachineRestApiV1
+## Running CoffeeMachineRestApiV2
 
-Run command in cmd/CoffeeMachineRestApiV1
+Run command in cmd/CoffeeMachineRestApiV2
 ```
 go build -o coffeeMachine.exe main.go
 ```
@@ -37,5 +37,5 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv1.0
+docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv2.0
 ```

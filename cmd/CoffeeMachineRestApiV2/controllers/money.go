@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/kOstovic/CoffeeMachine/internal/models"
-	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/kOstovic/CoffeeMachine/internal/models"
+	log "github.com/sirupsen/logrus"
 )
 
 type Money struct {
@@ -82,15 +83,18 @@ func putAllDenomination(c *gin.Context) {
 	cm, err := checkMoneyFromURL(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not update Denomination because of error: " + err.Error())
 		return
 	}
 	cm, err = models.UpdateDenominationPut(cm)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not update Denomination because of error: " + err.Error())
 		return
 	} else {
 		c.JSON(http.StatusOK, cm)
 	}
+	log.Infof("Update Denomination in machine to value %v", cm)
 }
 
 // putDenominationByName godoc
@@ -108,20 +112,24 @@ func putDenominationByName(c *gin.Context) {
 	name := c.Query("name")
 	valueStr := c.Query("value")
 	if name == "" || valueStr == "" {
-		c.JSON(http.StatusBadRequest, "name and value must be in query for putIngredientsByName operation")
+		c.JSON(http.StatusBadRequest, "name and value must be in query for putDenominationByName operation")
+		log.Warnf("Could not put drink Denomination by name because name is empty")
 		return
 	}
 	value, err := strconv.Atoi(valueStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not put in Denomination called %v because of error: %v", name, err.Error())
 		return
 	}
 	cm, err := models.UpdateDenominationValueByName(name, value)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not put in Denomination called %v because of error: %v", name, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, cm)
+	log.Debugf("Update Denomination in machine named %v to value %v", name, value)
 }
 
 // patchDenomination godoc
@@ -138,30 +146,34 @@ func patchDenomination(c *gin.Context) {
 	cm, err := checkMoneyFromURL(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not patch Denomination because of error: %v", err.Error())
 		return
 	}
 	cm, err = models.UpdateDenominationPatch(cm)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not patch Denomination because of error: %v", err.Error())
 		return
 	} else {
 		c.JSON(http.StatusOK, cm)
 	}
+	log.Debugf("Patched Denomination in machine %v", cm)
 }
 
 func checkMoneyFromURL(c *gin.Context) (models.Denomination, error) {
 	var denomination Denomination
 	if c.ShouldBindQuery(&denomination) == nil {
-		log.Println("====== Bind By Query String ======")
+		log.Debugf("====== Bind By Query String ====== from request %v", denomination)
 		return models.Denomination{Half: denomination.Half,
 			One: denomination.One, Two: denomination.Two,
 			Five: denomination.Five, Ten: denomination.Ten}, nil
 	} else if c.ShouldBindJSON(&denomination) == nil {
-		log.Println("====== Bind By JSON ======")
+		log.Debugf("====== Bind By JSON ====== from request %v", denomination)
 		return models.Denomination{Half: denomination.Half,
 			One: denomination.One, Two: denomination.Two,
 			Five: denomination.Five, Ten: denomination.Ten}, nil
 	} else {
-		return models.Denomination{}, fmt.Errorf("denomination could not be parsed")
+		log.Warnf("Denomination could not be parsed from request %v", denomination)
+		return models.Denomination{}, fmt.Errorf("Denomination could not be parsed")
 	}
 }
