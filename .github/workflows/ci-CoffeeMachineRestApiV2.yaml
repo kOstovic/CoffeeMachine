@@ -21,11 +21,18 @@ jobs:
           go vet -copylocks=false ./...
       - name: Run tests
         run: go test ./internal/models
+      - name: Create build directory
+        run : |
+          mkdir CoffeeMachine
+          cp -R internal CoffeeMachine/internal
+          cp -R cmd/CoffeeMachineRestApiV2 CoffeeMachine\cmd\CoffeeMachineRestApiV2
+          cp go.mod CoffeeMachine
+          cp go.sum CoffeeMachine
       - name: Build Docker image
         uses: docker/build-push-action@v5.1.0
         with:
           # Build's context is the set of files located in the specified PATH or URL
-          context: ./cmd/CoffeeMachineRestApiV2
+          context: ./CoffeeMachine
           # Path to the Dockerfile
           file: ./deployments/CoffeeMachineRestApiV2/Dockerfile
           # List of tags
