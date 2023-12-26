@@ -24,7 +24,7 @@ jobs:
       - name: Create build directory
         run : |
           pwd && ls -alh -R
-          mkdir deployments\CoffeeMachineRestApiV2\CoffeeMachine
+          mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine
           cp -R internal deployments/CoffeeMachineRestApiV2/CoffeeMachine/internal
           cp -R cmd/CoffeeMachineRestApiV2 deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd/CoffeeMachineRestApiV2
           cp go.mod deployments/CoffeeMachineRestApiV2/CoffeeMachine
