@@ -1,4 +1,4 @@
-//package controllers
+// package controllers
 package controllers
 
 import (
@@ -18,17 +18,19 @@ type Denomination struct {
 	Five int `form:"Five" json:"Five" binding:"required_without_all=One Two Half Ten,validateDenomination"`
 	Ten  int `form:"Ten" json:"Ten" binding:"required_without_all=One Two Five Half,validateDenomination"`
 }
-//used for initialization of CoffeeMachine
+
+// used for initialization of CoffeeMachine
 type CoffeeMachine struct {
-	Ingredients Ingredient `form:"Ingredients" json:"Ingredients"`
+	Ingredients  Ingredient   `form:"Ingredients" json:"Ingredients"`
 	Denomination Denomination `form:"Money" json:"Money" binding:"validateDenomination"`
 }
 
-//machineInitialized is private variable used for checking whether machine has been initialized
+// machineInitialized is private variable used for checking whether machine has been initialized
 var (
 	machineInitialized bool = false
 )
-//register route for coffeemachine in gin framework
+
+// register route for coffeemachine in gin framework
 func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 	router.POST("", postInitializeMachine)
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -60,12 +62,12 @@ func postInitializeMachine(c *gin.Context) {
 	}
 	cm, errIng := models.InitializeIngredients(iModel)
 	if errIng != nil {
-		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object " + err.Error())
+		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object "+err.Error())
 		return
 	}
 	mm, errDen := models.InitializeDenominations(mModel)
 	if errDen != nil {
-		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object " + err.Error())
+		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object "+err.Error())
 		return
 	}
 	machineInitialized = true
@@ -103,8 +105,8 @@ func validateIngredient(sl validator.StructLevel) {
 	if (ing.Water < 0 || ing.Milk < 0 || ing.Sugar < 0 ||
 		ing.CoffeeBeans < 0 || ing.TeaBeans < 0 || ing.Cups < 0) ||
 		(ing.Water <= 0 && ing.Milk <= 0 && ing.Sugar <= 0 &&
-			ing.CoffeeBeans <= 0 && ing.TeaBeans <= 0 && ing.Cups <= 0){
-		sl.ReportError(ing,"One of ingredients is not valid","Ingredient","Ingredient","")
+			ing.CoffeeBeans <= 0 && ing.TeaBeans <= 0 && ing.Cups <= 0) {
+		sl.ReportError(ing, "One of ingredients is not valid", "Ingredient", "Ingredient", "")
 	}
 
 }

@@ -19,7 +19,7 @@ type Drink struct {
 	Money       float64 `form:"Money" json:"Money" binding:"required_without_all=Milk Sugar CoffeeBeans TeaBeans Cups Water"`
 }
 
-//register route for drink in gin framework
+// register route for drink in gin framework
 func RegisterRoutesDrink(router *gin.RouterGroup) {
 	router.GET("", getDrink)
 	router.GET("/consume", getConsumeDrink)
@@ -71,7 +71,7 @@ func getConsumeDrink(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, err.Error())
 			return
 		}
-	denRet, err := models.UpdateDenominationConsume(denominationParam, cost)
+		denRet, err := models.UpdateDenominationConsume(denominationParam, cost)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err.Error())
 			return
@@ -121,7 +121,7 @@ func postAddDrink(c *gin.Context) {
 // @Success 200 {object} bool
 // @Failure 400,404
 // @Failure 500
-//@Router /drinks [delete]
+// @Router /drinks [delete]
 func postRemoveDrink(c *gin.Context) {
 	name := c.Query("name")
 	if name == "" {

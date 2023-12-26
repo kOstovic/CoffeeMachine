@@ -19,7 +19,7 @@ type Ingredient struct {
 	Cups        uint16 `form:"Cups" json:"Cups"`
 }
 
-//register route for /ingredient in gin framework
+// register route for /ingredient in gin framework
 func RegisterRoutesIngredients(router *gin.RouterGroup) {
 	router.GET("", getIngredients)
 	router.PUT("", putIngredients)
@@ -109,7 +109,7 @@ func putAllIngredients(c *gin.Context) {
 func putIngredientsByName(c *gin.Context) {
 	name := c.Query("name")
 	valueStr := c.Query("value")
-	if name == "" || valueStr == ""{
+	if name == "" || valueStr == "" {
 		c.JSON(http.StatusBadRequest, "name and value must be in query for putIngredientsByName operation")
 		return
 	}

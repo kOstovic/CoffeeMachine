@@ -1,19 +1,21 @@
 package commands
 
 import (
-	"github.com/abiosoft/ishell"
 	"os"
+
+	"github.com/abiosoft/ishell"
 )
 
 type command interface {
 	addCommands(ishell.Shell)
 }
+
 var (
 	cmCommand, iCommand, dCommand, mCommand command
 )
 var shell = ishell.New()
 
-func RegisterShell(){
+func RegisterShell() {
 	cmCommand = newCoffeeMachineCommand()
 	iCommand = newIngredientsCommand()
 	dCommand = newDrinkCommand()

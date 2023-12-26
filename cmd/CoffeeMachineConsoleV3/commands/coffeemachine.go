@@ -13,16 +13,17 @@ type coffeeMachineCommand struct {
 	Money       models.Denomination
 }
 
-//machineInitialized is private variable used for checking whether machine has been initialized
+// machineInitialized is private variable used for checking whether machine has been initialized
 var (
 	machineInitialized bool = false
 )
+
 func newCoffeeMachineCommand() *coffeeMachineCommand {
 	return &coffeeMachineCommand{}
 }
-func (cmCommand coffeeMachineCommand) addCommands(shell ishell.Shell){
+func (cmCommand coffeeMachineCommand) addCommands(shell ishell.Shell) {
 	shell.AddCmd(&ishell.Cmd{
-		Name: "coffeeMachineInit",
+		Name:    "coffeeMachineInit",
 		Aliases: []string{"initialize", "initializeCoffeeMachine"},
 		Func: func(c *ishell.Context) {
 			c.ShowPrompt(false)

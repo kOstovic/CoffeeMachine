@@ -13,7 +13,7 @@ type moneyCommand struct {
 	Denomination models.Denomination
 }
 type moneyByName struct {
-	Name string
+	Name   string
 	Amount int
 }
 
@@ -33,7 +33,7 @@ func (mmCommand moneyCommand) addCommands(shell ishell.Shell) {
 	}
 
 	money.AddCmd(&ishell.Cmd{
-		Name: "getAllAvailableDenomination",
+		Name:    "getAllAvailableDenomination",
 		Aliases: []string{"getDenominations", "denominations"},
 		Func: func(c *ishell.Context) {
 			c.ShowPrompt(false)
@@ -43,7 +43,7 @@ func (mmCommand moneyCommand) addCommands(shell ishell.Shell) {
 		Help: "Get current status of all denominations",
 	})
 	money.AddCmd(&ishell.Cmd{
-		Name: "getDenominationByName",
+		Name:    "getDenominationByName",
 		Aliases: []string{"getDenomination"},
 		Func: func(c *ishell.Context) {
 			c.ShowPrompt(false)
@@ -82,11 +82,11 @@ func (mmCommand moneyCommand) addCommands(shell ishell.Shell) {
 	shell.AddCmd(money)
 }
 
-func getAllAvailableDenomination(){
+func getAllAvailableDenomination() {
 	fmt.Printf("Current Denominations in machine are: '%v'\n", *models.GetCurrentMoney())
 }
 
-func getDenominationByName(){
+func getDenominationByName() {
 	fmt.Println("Enter Ingredient name: Half, One, Two, Five, Ten, Total")
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -99,7 +99,7 @@ func getDenominationByName(){
 	}
 	fmt.Printf("Denomination requested in machine is: '%v'\n", dm)
 }
-func putDenomination(){
+func putDenomination() {
 	fmt.Println("Enter json of denomination eg: { \"denomination\":{\"Half\":10,...}}. Denomination that are not in JSON will be 0.")
 	var denStruct moneyCommand
 
@@ -114,7 +114,7 @@ func putDenomination(){
 	}
 	fmt.Printf("Denomination in machine now are: '%v'\n", dm)
 }
-func putDenominationByName(){
+func putDenominationByName() {
 	fmt.Println("Enter name(case sensitive), amount to update Denomination by name eg: {\"name\":\"Half\", \"amount\":244}")
 	var denStruct moneyByName
 
@@ -129,7 +129,7 @@ func putDenominationByName(){
 	}
 	fmt.Printf("Denomination in machine now are: '%v'\n", dm)
 }
-func patchDenomination(){
+func patchDenomination() {
 	fmt.Println("Enter json of denomination eg: { \"denomination\":{\"Half\":10,...}}. Denomination that are not in JSON will not be updated.")
 	var denStruct moneyCommand
 
