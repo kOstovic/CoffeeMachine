@@ -35,7 +35,8 @@ jobs:
         uses: docker/build-push-action@v5.1.0
         with:
           # Build's context is the set of files located in the specified PATH or URL
-          context: ./deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          build-contexts: deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          context: deployments/CoffeeMachineRestApiV2/CoffeeMachine
           # Path to the Dockerfile
           build-args: --progress=plain
           file: ./deployments/CoffeeMachineRestApiV2/Dockerfile
