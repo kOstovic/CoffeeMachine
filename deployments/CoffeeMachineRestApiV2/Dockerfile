@@ -1,7 +1,7 @@
 FROM golang:1.21.5-alpine AS build
 
 WORKDIR /go/src/github.com/kOstovic/CoffeeMachine
-COPY . ..
+COPY . .
 ENV CGO_ENABLED=0
 RUN go mod download
 RUN go build -o /bin/coffeemachine cmd/CoffeeMachineRestApiV2/main.go 

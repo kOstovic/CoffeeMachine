@@ -4,15 +4,16 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/kOstovic/CoffeeMachine/internal/models"
 	"os"
+
+	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
 type ingredientsCommand struct {
 	Ingredients models.Ingredient
 }
 type ingredientByName struct {
-	Name string
+	Name   string
 	Amount int
 }
 
@@ -48,7 +49,6 @@ func (imCommand ingredientsCommand) ServeCommand() {
 		case "end":
 			fmt.Println("end command. Exiting subroutine.")
 			return
-			break
 		default:
 			println("Invalid command. Commands are: getAllIngredients, getIngredientsByName, putIngredients, putIngredientsByName, patchIngredients, end")
 		}
@@ -56,10 +56,10 @@ func (imCommand ingredientsCommand) ServeCommand() {
 	}
 }
 
-func getAllIngredients(){
+func getAllIngredients() {
 	fmt.Printf("Current Ingredients in machine are: '%v'\n", *models.GetMachineIngredients())
 }
-func getIngredientsByName(){
+func getIngredientsByName() {
 	fmt.Println("Enter Ingredient name: Water, Milk, Sugar, CoffeeBeans, TeaBeans, Cups")
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -72,7 +72,7 @@ func getIngredientsByName(){
 	}
 	fmt.Printf("Ingredient requested in machine is: '%v'\n", cm)
 }
-func putIngredients(){
+func putIngredients() {
 	fmt.Println("Enter json of ingredient eg: { \"ingredients\":{\"Water\":1000,...}}. All Ingredients that are not in JSON will be 0.")
 	var ingStruct ingredientsCommand
 
@@ -87,7 +87,7 @@ func putIngredients(){
 	}
 	fmt.Printf("Ingredients in machine now are: '%v'\n", cm)
 }
-func putIngredientsByName(){
+func putIngredientsByName() {
 	fmt.Println("Enter json of name(case sensitive), amount to update Ingredient by name eg: {\"name\":\"Water\", \"amount\":244}")
 	var ingStruct ingredientByName
 
@@ -107,7 +107,7 @@ func putIngredientsByName(){
 	}
 	fmt.Printf("Ingredients in machine now are: '%v'\n", cm)
 }
-func patchIngredients(){
+func patchIngredients() {
 	fmt.Println("Enter json of ingredient eg: { \"ingredients\":{\"Water\":1000,...}}. Ingredients that are not in JSON will not be updated.")
 	var ingStruct ingredientsCommand
 

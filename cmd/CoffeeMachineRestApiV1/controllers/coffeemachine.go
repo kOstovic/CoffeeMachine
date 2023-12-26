@@ -14,7 +14,7 @@ type coffeeMachineController struct {
 	Money       models.Denomination
 }
 
-//machineInitialized is private variable used for checking whether machine has been initialized
+// machineInitialized is private variable used for checking whether machine has been initialized
 var (
 	machineInitialized bool = false
 )
@@ -34,6 +34,7 @@ func (cmContoller coffeeMachineController) ServeHTTP(w http.ResponseWriter, r *h
 		}
 	}
 }
+
 // InitializeMachine godoc
 // @Summary Initialize Machine based on given Ingredient and money json
 // @Description Initialize Machine based on given Ingredient and money json

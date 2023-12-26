@@ -4,8 +4,9 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/kOstovic/CoffeeMachine/internal/models"
 	"os"
+
+	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
 type coffeeMachineCommand struct {
@@ -13,7 +14,7 @@ type coffeeMachineCommand struct {
 	Money       models.Denomination
 }
 
-//machineInitialized is private variable used for checking whether machine has been initialized
+// machineInitialized is private variable used for checking whether machine has been initialized
 var (
 	machineInitialized bool = false
 )
@@ -35,7 +36,6 @@ func (cmCommand coffeeMachineCommand) ServeCommand() {
 		case "end":
 			fmt.Println("end command. Exiting subroutine.")
 			return
-			break
 		default:
 			println("Invalid command. Commands are: initializeCoffeeMachine, end")
 		}

@@ -1,0 +1,42 @@
+name: CI-CoffeeMachineRestApiV2
+on: push
+
+jobs: 
+  Build_golang_app :
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.1
+      - name: Setup go
+        uses: actions/setup-go@v5
+        with: 
+          go-version: 1.21
+      - name: Set variables
+        run: |
+          VER=$(cat deployments/CoffeeMachineRestApiV2/sem.ver)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+      - name: Run linting
+        run: |
+          go fmt ./...
+          go vet -copylocks=false ./...
+      - name: Run tests
+        run: go test ./internal/models
+      - name: Create build directory
+        run : |
+          mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd
+          cp -R internal deployments/CoffeeMachineRestApiV2/CoffeeMachine/internal
+          cp -R cmd/CoffeeMachineRestApiV2 deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd/CoffeeMachineRestApiV2
+          cp go.mod deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          cp go.sum deployments/CoffeeMachineRestApiV2/CoffeeMachine
+      - name: Build Docker image
+        uses: docker/build-push-action@v5.1.0
+        with:
+          # Build's context is the set of files located in the specified PATH or URL
+          context: deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          # Path to the Dockerfile
+          build-args: --progress=plain
+          file: ./deployments/CoffeeMachineRestApiV2/Dockerfile
+          # List of tags
+          tags: github.com/kostovic/coffeemachine/restapiv2:${{ env.VERSION }}.${{github.run_number}}
+

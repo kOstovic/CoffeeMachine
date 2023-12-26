@@ -10,18 +10,17 @@ import (
 )
 
 type drinkCommand struct {
-	Name string
+	Name  string
 	Drink models.Drink
 }
 type consumeDrinkStruct struct {
 	Denomination models.Denomination
 }
 
-
 func newDrinkCommand() *drinkCommand {
 	return &drinkCommand{}
 }
-func (idCommand drinkCommand) addCommands(shell ishell.Shell)() {
+func (idCommand drinkCommand) addCommands(shell ishell.Shell) {
 
 	drink := &ishell.Cmd{
 		Name: "drink",
@@ -34,7 +33,7 @@ func (idCommand drinkCommand) addCommands(shell ishell.Shell)() {
 	}
 
 	drink.AddCmd(&ishell.Cmd{
-		Name: "getAllAvailableDrinks",
+		Name:    "getAllAvailableDrinks",
 		Aliases: []string{"getAllDrinks", "drinks"},
 		Func: func(c *ishell.Context) {
 			c.ShowPrompt(false)
@@ -44,7 +43,7 @@ func (idCommand drinkCommand) addCommands(shell ishell.Shell)() {
 		Help: "Get all currently available drinks",
 	})
 	drink.AddCmd(&ishell.Cmd{
-		Name: "getConsumeDrink",
+		Name:    "getConsumeDrink",
 		Aliases: []string{"consumeDrink", "consume"},
 		Func: func(c *ishell.Context) {
 			var allDrinksNames = models.GetAvailableDrinksName()
@@ -59,7 +58,7 @@ func (idCommand drinkCommand) addCommands(shell ishell.Shell)() {
 		Help: "Consume drink",
 	})
 	drink.AddCmd(&ishell.Cmd{
-		Name: "postAddDrink",
+		Name:    "postAddDrink",
 		Aliases: []string{"addDrink"},
 		Func: func(c *ishell.Context) {
 			c.ShowPrompt(false)
@@ -69,7 +68,7 @@ func (idCommand drinkCommand) addCommands(shell ishell.Shell)() {
 		Help: "Add new drink",
 	})
 	drink.AddCmd(&ishell.Cmd{
-		Name: "postRemoveDrink",
+		Name:    "postRemoveDrink",
 		Aliases: []string{"removeDrink"},
 		Func: func(c *ishell.Context) {
 			c.ShowPrompt(false)
@@ -81,11 +80,11 @@ func (idCommand drinkCommand) addCommands(shell ishell.Shell)() {
 	shell.AddCmd(drink)
 }
 
-func getAllAvailableDrinks(){
+func getAllAvailableDrinks() {
 	fmt.Printf("Drinks in machine are: '%v'\n", models.GetAvailableDrinks())
 }
 
-func getConsumeDrink(name string){
+func getConsumeDrink(name string) {
 	fmt.Printf("Put your Denominations as json eg: {\"denomination\": {\"Half\":15, \"One\":15}}\n")
 	var consumeStruct consumeDrinkStruct
 
@@ -109,7 +108,7 @@ func getConsumeDrink(name string){
 	fmt.Printf("Drink served: '%v' and Denomination returned: '%v'\n", name, denRet)
 
 }
-func postAddDrink(){
+func postAddDrink() {
 	fmt.Println("Enter json of name and drink eg: {\"name\":\"tea\", \"Drink\": {\"Water\":10,\"Milk\":2,\"Sugar\":4,\"CoffeeBeans\":0,\"TeaBeans\":5,\"Cups\":1,\"Money\":4}}. Ingredients requirements of drink that are not in JSON will be 0.")
 	var drinkStruct drinkCommand
 
@@ -124,7 +123,7 @@ func postAddDrink(){
 	}
 	fmt.Printf("Drink Added in machine: '%v'\n", drink)
 }
-func postRemoveDrink(){
+func postRemoveDrink() {
 	fmt.Println("Enter Drink name(case sensitive) you wish to remove:")
 
 	scanner := bufio.NewScanner(os.Stdin)

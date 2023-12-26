@@ -4,15 +4,16 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/kOstovic/CoffeeMachine/internal/models"
 	"os"
+
+	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
 type moneyCommand struct {
 	Denomination models.Denomination
 }
 type moneyByName struct {
-	Name string
+	Name   string
 	Amount int
 }
 
@@ -49,7 +50,6 @@ func (mmCommand moneyCommand) ServeCommand() {
 		case "end":
 			fmt.Println("end command. Exiting subroutine.")
 			return
-			break
 		default:
 			println("Invalid command. Commands are: getAllAvailableDenomination, getDenominationByName, putDenomination, putDenominationByName, patchDenomination, end")
 		}
@@ -57,11 +57,11 @@ func (mmCommand moneyCommand) ServeCommand() {
 	}
 }
 
-func getAllAvailableDenomination(){
+func getAllAvailableDenomination() {
 	fmt.Printf("Current Denominations in machine are: '%v'\n", *models.GetCurrentMoney())
 }
 
-func getDenominationByName(){
+func getDenominationByName() {
 	fmt.Println("Enter Ingredient name: Half, One, Two, Five, Ten, Total")
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -74,7 +74,7 @@ func getDenominationByName(){
 	}
 	fmt.Printf("Denomination requested in machine is: '%v'\n", dm)
 }
-func putDenomination(){
+func putDenomination() {
 	fmt.Println("Enter json of denomination eg: { \"denomination\":{\"Half\":10,...}}. Denomination that are not in JSON will be 0.")
 	var denStruct moneyCommand
 
@@ -89,7 +89,7 @@ func putDenomination(){
 	}
 	fmt.Printf("Denomination in machine now are: '%v'\n", dm)
 }
-func putDenominationByName(){
+func putDenominationByName() {
 	fmt.Println("Enter name(case sensitive), amount to update Denomination by name eg: {\"name\":\"Half\", \"amount\":244}")
 	var denStruct moneyByName
 
@@ -104,7 +104,7 @@ func putDenominationByName(){
 	}
 	fmt.Printf("Denomination in machine now are: '%v'\n", dm)
 }
-func patchDenomination(){
+func patchDenomination() {
 	fmt.Println("Enter json of denomination eg: { \"denomination\":{\"Half\":10,...}}. Denomination that are not in JSON will not be updated.")
 	var denStruct moneyCommand
 

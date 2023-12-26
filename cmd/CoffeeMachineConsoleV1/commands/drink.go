@@ -4,22 +4,22 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/kOstovic/CoffeeMachine/internal/models"
 	"os"
+
+	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
 type drinkCommand struct {
-	Name string
+	Name  string
 	Drink models.Drink
 }
 type consumeDrinkStruct struct {
-	Name string
+	Name         string
 	Denomination models.Denomination
 }
 
-
 func newDrinkCommand() *drinkCommand {
-return &drinkCommand{}
+	return &drinkCommand{}
 }
 func (idCommand drinkCommand) ServeCommand() {
 	fmt.Println("drink command. available commands are: getAllAvailableDrinks, getConsumeDrink, postAddDrink, postRemoveDrink, end")
@@ -46,7 +46,6 @@ func (idCommand drinkCommand) ServeCommand() {
 		case "end":
 			fmt.Println("end command. Exiting subroutine.")
 			return
-			break
 		default:
 			println("Invalid command. Commands are: getAllAvailableDrinksEntering, getConsumeDrink, postAddDrink, postRemoveDrink, end")
 		}
@@ -54,11 +53,11 @@ func (idCommand drinkCommand) ServeCommand() {
 	}
 }
 
-func getAllAvailableDrinks(){
+func getAllAvailableDrinks() {
 	fmt.Printf("Drinks in machine are: '%v'\n", models.GetAvailableDrinks())
 }
 
-func getConsumeDrink(){
+func getConsumeDrink() {
 	fmt.Println("Enter Drink in json name(case sensitive), Denomination(json) eg: {\"name\":\"tea\", \"denomination\": {\"Half\":15, \"One\":15}}")
 
 	var consumeStruct consumeDrinkStruct
@@ -83,7 +82,7 @@ func getConsumeDrink(){
 	fmt.Printf("Drink served: '%v' and Denomination returned: '%v'\n", consumeStruct.Name, denRet)
 
 }
-func postAddDrink(){
+func postAddDrink() {
 	fmt.Println("Enter json of name and drink eg: {\"name\":\"tea\", \"Drink\": {\"Water\":10,\"Milk\":2,\"Sugar\":4,\"CoffeeBeans\":0,\"TeaBeans\":5,\"Cups\":1,\"Money\":4}}. Ingredients requirements of drink that are not in JSON will be 0.")
 	var drinkStruct drinkCommand
 
@@ -98,7 +97,7 @@ func postAddDrink(){
 	}
 	fmt.Printf("Drink Added in machine: '%v'\n", drink)
 }
-func postRemoveDrink(){
+func postRemoveDrink() {
 	fmt.Println("Enter Drink name(case sensitive) you wish to remove:")
 
 	scanner := bufio.NewScanner(os.Stdin)

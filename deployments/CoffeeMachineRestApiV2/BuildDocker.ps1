@@ -6,5 +6,5 @@ Copy-Item -Path "..\..\cmd\CoffeeMachineRestApiV2\" -Destination "CoffeeMachine\
 Copy-Item -Path "..\..\go.mod" -Destination "CoffeeMachine"
 Copy-Item -Path "..\..\go.sum" -Destination "CoffeeMachine"
 
-docker build . -t github.com/kostovic/coffeemachine:restapiv2.0 --no-cache
+docker build -f Dockerfile -t github.com/kostovic/coffeemachine:restapiv2.0 --no-cache "CoffeeMachine"
 Remove-Item "CoffeeMachine" -Recurse

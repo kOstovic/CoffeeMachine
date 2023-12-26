@@ -17,7 +17,7 @@ type Money struct {
 	Ten  int `form:"Ten" json:"Ten"`
 }
 
-//register route for coffeemachine in gin framework
+// register route for coffeemachine in gin framework
 func RegisterRoutesDenomination(router *gin.RouterGroup) {
 	router.GET("", getDenominations)
 	router.PUT("", putDenomination)
@@ -38,6 +38,7 @@ func putDenomination(c *gin.Context) {
 		putAllDenomination(c)
 	}
 }
+
 // getAllAvailableDenomination godoc
 // @Summary Get all denominations available
 // @Description Get all denominations available
@@ -106,7 +107,7 @@ func putAllDenomination(c *gin.Context) {
 func putDenominationByName(c *gin.Context) {
 	name := c.Query("name")
 	valueStr := c.Query("value")
-	if name == "" || valueStr == ""{
+	if name == "" || valueStr == "" {
 		c.JSON(http.StatusBadRequest, "name and value must be in query for putIngredientsByName operation")
 		return
 	}
