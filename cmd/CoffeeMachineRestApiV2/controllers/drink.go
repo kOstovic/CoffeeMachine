@@ -164,7 +164,7 @@ func checkDrinkFromURL(c *gin.Context) (models.Drink, error) {
 			CoffeeBeans: drink.CoffeeBeans, TeaBeans: drink.TeaBeans,
 			Cups: drink.Cups, Money: drink.Money}, nil
 	} else {
-		log.Warnf("Drink could not be parsed from request %v", &drink)
+		log.Debugf("Drink could not be parsed from request %v", &drink)
 		return models.Drink{}, fmt.Errorf("Drink could not be parsed in both query and body")
 	}
 }
@@ -182,7 +182,7 @@ func checkDenFromReq(c *gin.Context) (models.Denomination, error) {
 			One: money.One, Two: money.Two,
 			Five: money.Five, Ten: money.Ten}, nil
 	} else {
-		log.Warnf("Denomination could not be parsed from request %v", money)
+		log.Debugf("Denomination could not be parsed from request %v", money)
 		return models.Denomination{}, fmt.Errorf("Denomination could not be parsed")
 	}
 }

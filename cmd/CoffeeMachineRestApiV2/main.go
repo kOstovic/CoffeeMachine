@@ -39,8 +39,8 @@ func main() {
 	// set global log level
 	log.SetLevel(ll)
 
-	router := gin.Default()
-	router.Use(gin.Logger())
+	router := gin.New()
+	router.Use(gin.LoggerWithWriter(log.StandardLogger().WriterLevel(log.DebugLevel)))
 	router.Use(gin.Recovery())
 
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
@@ -51,9 +51,9 @@ func main() {
 	controllers.RegisterRoutesDenomination(coffeemachine.Group("/money"))
 	router.GET("/coffeemachine/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Ping test
-	coffeemachine.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
+	//health test
+	coffeemachine.GET("/health", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
 	})
 	//router := controllers.SetupRouter()
 	// Listen and Server in 0.0.0.0:3000

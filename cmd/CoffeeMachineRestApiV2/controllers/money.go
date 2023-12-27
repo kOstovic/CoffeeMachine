@@ -173,7 +173,7 @@ func checkMoneyFromURL(c *gin.Context) (models.Denomination, error) {
 			One: denomination.One, Two: denomination.Two,
 			Five: denomination.Five, Ten: denomination.Ten}, nil
 	} else {
-		log.Warnf("Denomination could not be parsed from request %v", denomination)
+		log.Debugf("Denomination could not be parsed from request %v", denomination)
 		return models.Denomination{}, fmt.Errorf("Denomination could not be parsed")
 	}
 }

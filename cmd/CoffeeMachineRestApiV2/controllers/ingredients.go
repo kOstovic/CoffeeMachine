@@ -178,7 +178,7 @@ func checkIngredientsFromURL(c *gin.Context) (models.Ingredient, error) {
 			CoffeeBeans: ingredient.CoffeeBeans, TeaBeans: ingredient.TeaBeans,
 			Cups: ingredient.Cups}, nil
 	} else {
-		log.Warnf("Ingredient could not be parsed from request %v", ingredient)
+		log.Debugf("Ingredient could not be parsed from request %v", ingredient)
 		return models.Ingredient{}, fmt.Errorf("Ingredient could not be parsed")
 	}
 }

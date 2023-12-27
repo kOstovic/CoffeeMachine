@@ -105,7 +105,7 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv2.0
+docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv2:0.9.0
 ```
 restapiv2.0 is running in production mode by default
 

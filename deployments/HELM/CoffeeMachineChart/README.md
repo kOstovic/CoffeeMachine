@@ -69,8 +69,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | Parameter                                 | Description                                   | Default                                                 |
 |-------------------------------------------|-----------------------------------------------|---------------------------------------------------------|
 | `replicaCount`                            | Number of nodes                               | `1`                                                     |
-| `image.repository`                        | Image repository                              | `github.com/kostovic/coffeemachine`                     |
-| `image.tag`                               | Image tag                                     | `restapiv2.0`                                           |
+| `image.repository`                        | Image repository                              | `github.com/kostovic/coffeemachine/restapiv2`           |
+| `image.tag`                               | Image tag                                     | `0.9.0`                                                 |
 | `image.pullPolicy`                        | Image pull policy                             | `IfNotPresent`                                          |
 | `image.pullSecrets`                       | Image pull secrets                            | `[]`                                                    |
 | `securityContext`                         | securityContext of contaier                   | `{}`                                                    |

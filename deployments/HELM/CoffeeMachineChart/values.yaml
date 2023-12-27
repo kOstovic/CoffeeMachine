@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: github.com/kostovic/coffeemachine
-  tag: "restapiv2.0"
+  repository: github.com/kostovic/coffeemachine/restapiv2
+  tag: "0.9.0"
   pullPolicy: IfNotPresent
   pullSecrets: []
 podAnnotations: {}

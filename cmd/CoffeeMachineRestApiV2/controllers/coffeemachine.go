@@ -92,7 +92,7 @@ func checkCoffeeMachineFromReq(c *gin.Context) (models.Ingredient, models.Denomi
 				One: coffeeMachine.Denomination.One, Two: coffeeMachine.Denomination.Two,
 				Five: coffeeMachine.Denomination.Five, Ten: coffeeMachine.Denomination.Ten}, nil
 	} else {
-		log.Warnf("coffeeMachine could not be parsed from request %v", coffeeMachine)
+		log.Debugf("coffeeMachine could not be parsed from request %v", coffeeMachine)
 		return models.Ingredient{}, models.Denomination{}, fmt.Errorf("coffeeMachine could not be parsed or validation failed - check your values again")
 	}
 }

@@ -13,8 +13,8 @@ docker-compose down
 
 Variables and their defaults are:
 ```
-COFFEEMACHINE_IMAGE=github.com/kostovic/coffeemachine
-COFFEEMACHINE_TAG=restapiv2.0
+COFFEEMACHINE_IMAGE=github.com/kostovic/coffeemachin/restapiv2
+COFFEEMACHINE_TAG=0.9.0
 COFFEEMACHINE_HTTP_PORT=3000
 GIN_MODE=release
 ```
