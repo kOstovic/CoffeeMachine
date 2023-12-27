@@ -82,6 +82,9 @@ API is running in localhost:3000
 (port will be customizable in future refactor)
 
 Postman collection can be used for testing or just go to swagger endpoint in CoffeeMachineRestApiV2.
+Metrics endpoint is exposed on /metrics 
+Health endpoint is exposed on /coffeemachine/health
+Logging level can be set with environment variable "LOG_LEVEL" in runtime
 
 ## Running CoffeeMachineConsole
 

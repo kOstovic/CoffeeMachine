@@ -12,6 +12,9 @@ CoffeeMachine has endpoint:
 >  - /coffeemachine/money
 > - for checking all available drinks, adding them and consuming them
 >  - /coffeemachine/drinks
+> - utility
+>  - /metrics
+>  - /coffeemachine/health
 > -  /coffeemachine/swagger/index.html swagger endpoint in restAPIv2
 
 ## Running CoffeeMachineRestApiV2
@@ -26,6 +29,9 @@ API is running in localhost:3000
 (port will be customizable in future refactor)
 
 Postman collection can be used for testing.
+Metrics endpoint is exposed on /metrics 
+Health endpoint is exposed on /coffeemachine/health
+Logging level can be set with environment variable "LOG_LEVEL" in runtime
 
 ## Docker
 
