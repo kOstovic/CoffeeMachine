@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: github.com/kostovic/coffeemachine
-  tag: "restapiv2.0"
+  repository: github.com/kostovic/coffeemachine/restapiv2
+  tag: "0.9.0"
   pullPolicy: IfNotPresent
   pullSecrets: []
 podAnnotations: {}
@@ -24,6 +24,7 @@ securityContext: {}
 deployment:
   env:
     GIN_MODE: "release"
+    LOG_LEVEL: "debug"
 
 volumes:
 #EmptyDir shares a temporary directory that shares a pod's lifetime: saves data if restart occurs and can be used for log rotation folder or H2 database storage

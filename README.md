@@ -82,6 +82,9 @@ API is running in localhost:3000
 (port will be customizable in future refactor)
 
 Postman collection can be used for testing or just go to swagger endpoint in CoffeeMachineRestApiV2.
+Metrics endpoint is exposed on /metrics 
+Health endpoint is exposed on /coffeemachine/health
+Logging level can be set with environment variable "LOG_LEVEL" in runtime
 
 ## Running CoffeeMachineConsole
 
@@ -105,7 +108,7 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv2.0
+docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv2:0.9.0
 ```
 restapiv2.0 is running in production mode by default
 

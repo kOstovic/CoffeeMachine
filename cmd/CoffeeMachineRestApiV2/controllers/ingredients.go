@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kOstovic/CoffeeMachine/internal/models"
@@ -84,15 +85,18 @@ func putAllIngredients(c *gin.Context) {
 	cm, err := checkIngredientsFromURL(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not update ingredients because of error: " + err.Error())
 		return
 	}
 	cm, err = models.UpdateIngredientPut(cm)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not update ingredients because of error: " + err.Error())
 		return
 	} else {
 		c.JSON(http.StatusOK, cm)
 	}
+	log.Infof("Update Ingredients in machine to value %v", cm)
 }
 
 // putIngredientsByName godoc
@@ -111,20 +115,24 @@ func putIngredientsByName(c *gin.Context) {
 	valueStr := c.Query("value")
 	if name == "" || valueStr == "" {
 		c.JSON(http.StatusBadRequest, "name and value must be in query for putIngredientsByName operation")
+		log.Warnf("Could not put drink ingredient by name because name is empty")
 		return
 	}
 	value, err := strconv.ParseUint(valueStr, 10, 16)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not put in ingredient called %v because of error: %v", name, err.Error())
 		return
 	}
 	valueuint16 := uint16(value)
 	cm, err := models.UpdateIngredientValueByName(name, valueuint16)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not put in ingredient called %v because of error: %v", name, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, cm)
+	log.Debugf("Update Ingredients in machine named %v to value %v", name, valueuint16)
 }
 
 // patchIngredients godoc
@@ -141,32 +149,36 @@ func patchIngredients(c *gin.Context) {
 	cm, err := checkIngredientsFromURL(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not patch ingredient because of error: %v", err.Error())
 		return
 	}
 	cm, err = models.UpdateIngredientPatch(cm)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not patch ingredient because of error: %v", err.Error())
 		return
 	} else {
 		c.JSON(http.StatusOK, cm)
 	}
+	log.Debugf("Patched Ingredients in machine %v", cm)
 }
 
 func checkIngredientsFromURL(c *gin.Context) (models.Ingredient, error) {
 	var ingredient Ingredient
 	if c.ShouldBindQuery(&ingredient) == nil {
-		log.Println("====== Bind By Query String ======")
+		log.Debugf("====== Bind By Query String ====== from request %v", ingredient)
 		return models.Ingredient{Water: ingredient.Water,
 			Milk: ingredient.Milk, Sugar: ingredient.Sugar,
 			CoffeeBeans: ingredient.CoffeeBeans, TeaBeans: ingredient.TeaBeans,
 			Cups: ingredient.Cups}, nil
 	} else if c.ShouldBindJSON(&ingredient) == nil {
-		log.Println("====== Bind By JSON ======")
+		log.Debugf("====== Bind By JSON ====== from request %v", ingredient)
 		return models.Ingredient{Water: ingredient.Water,
 			Milk: ingredient.Milk, Sugar: ingredient.Sugar,
 			CoffeeBeans: ingredient.CoffeeBeans, TeaBeans: ingredient.TeaBeans,
 			Cups: ingredient.Cups}, nil
 	} else {
-		return models.Ingredient{}, fmt.Errorf("ingredient could not be parsed")
+		log.Debugf("Ingredient could not be parsed from request %v", ingredient)
+		return models.Ingredient{}, fmt.Errorf("Ingredient could not be parsed")
 	}
 }

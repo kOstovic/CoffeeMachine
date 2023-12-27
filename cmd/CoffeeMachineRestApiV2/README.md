@@ -12,11 +12,14 @@ CoffeeMachine has endpoint:
 >  - /coffeemachine/money
 > - for checking all available drinks, adding them and consuming them
 >  - /coffeemachine/drinks
+> - utility
+>  - /metrics
+>  - /coffeemachine/health
 > -  /coffeemachine/swagger/index.html swagger endpoint in restAPIv2
 
-## Running CoffeeMachineRestApiV1
+## Running CoffeeMachineRestApiV2
 
-Run command in cmd/CoffeeMachineRestApiV1
+Run command in cmd/CoffeeMachineRestApiV2
 ```
 go build -o coffeeMachine.exe main.go
 ```
@@ -26,6 +29,9 @@ API is running in localhost:3000
 (port will be customizable in future refactor)
 
 Postman collection can be used for testing.
+Metrics endpoint is exposed on /metrics 
+Health endpoint is exposed on /coffeemachine/health
+Logging level can be set with environment variable "LOG_LEVEL" in runtime
 
 ## Docker
 
@@ -37,5 +43,5 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine:restapiv1.0
+docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv2:0.9.0
 ```

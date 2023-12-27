@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
@@ -64,22 +65,26 @@ func getConsumeDrink(c *gin.Context) {
 
 	if !preReq || err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Debugf("Could not consume drink called %v because of error: %v", name, err.Error())
 		return
 	} else {
 		denominationParam, err := checkDenFromReq(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err.Error())
+			log.Debugf("Could not consume drink called %v because of error: %v", name, err.Error())
 			return
 		}
 		denRet, err := models.UpdateDenominationConsume(denominationParam, cost)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err.Error())
+			log.Debugf("Could not consume drink called %v because of error: %v", name, err.Error())
 			return
 		} else {
 			models.ConsumeDrink(name)
 			c.JSON(http.StatusOK, denRet)
 		}
 	}
+	log.Debugf("Consumed drink called %v", name)
 }
 
 // AddDrink godoc
@@ -97,20 +102,24 @@ func postAddDrink(c *gin.Context) {
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(http.StatusBadRequest, "name in query is empty")
+		log.Warnf("Could not add drink because name is empty")
 		return
 	}
 	cm, err := checkDrinkFromURL(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not add drink called %v because of error: %v", name, err.Error())
 		return
 	}
 	drink, err := models.AddDrink(name, cm)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not add drink called %v because of error: %v", name, err.Error())
 		return
 	} else {
 		c.JSON(http.StatusOK, drink)
 	}
+	log.Infof("Added drink called %v", name)
 }
 
 // RemoveDrink godoc
@@ -126,49 +135,54 @@ func postRemoveDrink(c *gin.Context) {
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(http.StatusBadRequest, "name in query is empty")
+		log.Warnf("Could not remove drink because name is empty")
 		return
 	}
 	OK, err := models.RemoveDrink(name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		log.Warnf("Could not remove drink called %v because of error: %v", name, err.Error())
 		return
 	} else {
 		c.JSON(http.StatusOK, OK)
 	}
+	log.Infof("Removed drink called %v", name)
 }
 
 func checkDrinkFromURL(c *gin.Context) (models.Drink, error) {
 	var drink Drink
 	if c.ShouldBindQuery(&drink) == nil {
-		log.Println("====== Bind By Query String ======")
+		log.Debugf("====== Bind By Query String ====== from request %v", &drink)
 		return models.Drink{Water: drink.Water,
 			Milk: drink.Milk, Sugar: drink.Sugar,
 			CoffeeBeans: drink.CoffeeBeans, TeaBeans: drink.TeaBeans,
 			Cups: drink.Cups, Money: drink.Money}, nil
 	} else if c.ShouldBindJSON(&drink) == nil {
-		log.Println("====== Bind By JSON ======")
+		log.Debugf("====== Bind By JSON ====== from request %v", &drink)
 		return models.Drink{Water: drink.Water,
 			Milk: drink.Milk, Sugar: drink.Sugar,
 			CoffeeBeans: drink.CoffeeBeans, TeaBeans: drink.TeaBeans,
 			Cups: drink.Cups, Money: drink.Money}, nil
 	} else {
-		return models.Drink{}, fmt.Errorf("drink could not be parsed in both query and body")
+		log.Debugf("Drink could not be parsed from request %v", &drink)
+		return models.Drink{}, fmt.Errorf("Drink could not be parsed in both query and body")
 	}
 }
 
 func checkDenFromReq(c *gin.Context) (models.Denomination, error) {
 	var money Money
 	if c.ShouldBindQuery(&money) == nil {
-		log.Println("====== Bind By Query String ======")
+		log.Debugf("====== Bind By Query String ====== from request %v", money)
 		return models.Denomination{Half: money.Half,
 			One: money.One, Two: money.Two,
 			Five: money.Five, Ten: money.Ten}, nil
 	} else if c.ShouldBindJSON(&money) == nil {
-		log.Println("====== Bind By JSON ======")
+		log.Debugf("====== Bind By JSON ====== from request %v", money)
 		return models.Denomination{Half: money.Half,
 			One: money.One, Two: money.Two,
 			Five: money.Five, Ten: money.Ten}, nil
 	} else {
-		return models.Denomination{}, fmt.Errorf("denomination could not be parsed")
+		log.Debugf("Denomination could not be parsed from request %v", money)
+		return models.Denomination{}, fmt.Errorf("Denomination could not be parsed")
 	}
 }

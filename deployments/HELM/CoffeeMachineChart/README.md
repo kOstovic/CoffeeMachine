@@ -69,12 +69,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Parameter                                 | Description                                   | Default                                                 |
 |-------------------------------------------|-----------------------------------------------|---------------------------------------------------------|
 | `replicaCount`                            | Number of nodes                               | `1`                                                     |
-| `image.repository`                        | Image repository                              | `github.com/kostovic/coffeemachine`                     |
-| `image.tag`                               | Image tag                                     | `restapiv2.0`                                           |
+| `image.repository`                        | Image repository                              | `github.com/kostovic/coffeemachine/restapiv2`           |
+| `image.tag`                               | Image tag                                     | `0.9.0`                                                 |
 | `image.pullPolicy`                        | Image pull policy                             | `IfNotPresent`                                          |
 | `image.pullSecrets`                       | Image pull secrets                            | `[]`                                                    |
 | `securityContext`                         | securityContext of contaier                   | `{}`                                                    |
-| `deployment.env`                          | Extra environment variables passed to container| `{GIN_MODE: "release"}`                                |
+| `deployment.env`                          | Extra environment variables passed to container| `{GIN_MODE: "release", LOG_LEVEL: "debug"}`            |
 | `service.type`                            | Kubernetes service type                       | `LoadBalancer`                                          |
 | `service.http_api_port`                   | Kubernetes port where service is exposed      | `3000`                                                  |
 | `ingress.enabled`                         | Enables Ingress - works only if there is nginx ingress controller installed onto cluster    | `false`   |
