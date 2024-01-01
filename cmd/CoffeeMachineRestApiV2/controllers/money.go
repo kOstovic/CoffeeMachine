@@ -6,8 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kOstovic/CoffeeMachine/internal/models"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/kOstovic/CoffeeMachine/internal/models"
 )
 
 type Money struct {

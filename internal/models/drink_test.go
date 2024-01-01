@@ -86,8 +86,8 @@ func TestAddDrink(t *testing.T) {
 		err   error
 	}{
 		{"drinkTestOK", drinkTestOK, drinkTestOK, fmt.Errorf("Drink already exists '%v'", drinkTestOK)},
-		{"drinkTestFailMoney", drinkTestFailMoney, Drink{}, fmt.Errorf("Drink must have non negative values for ingredients and money %v", drinkTestFailMoney)},
-		{"drinkTestFailZero", drinkTestFailZero, Drink{}, fmt.Errorf("Drink must have at least one 0 or positive value %v", Drink{})},
+		{"drinkTestFailMoney", drinkTestFailMoney, drinkTestFailMoney, fmt.Errorf("Drink must have non negative values for ingredients and money %v", drinkTestFailMoney)},
+		{"drinkTestFailZero", drinkTestFailZero, drinkTestFailZero, fmt.Errorf("Drink must have at least one 0 or positive value for ingridients %v", Drink{})},
 	}
 
 	for _, tt := range testsError {
@@ -95,7 +95,7 @@ func TestAddDrink(t *testing.T) {
 		t.Run(testnameDrink, func(t *testing.T) {
 			result, err := AddDrink(tt.name, tt.drink)
 			if result != tt.want || err.Error() != tt.err.Error() {
-				t.Errorf("AddDrink got %v, want %v, err %v", result, tt.drink, err)
+				t.Errorf("AddDrink got %v, want %v, want err: %v, got err: %v", result, tt.drink, tt.err.Error(), err)
 			}
 		})
 	}
@@ -188,7 +188,7 @@ func TestCheckPrereqForDrink(t *testing.T) {
 	}
 
 	t.Cleanup(func() {
-		_, _ = UpdateIngredientPut(ingredientTestCleanUpInDrink)
+		_, _ = CleanupIngredients()
 	})
 }
 
@@ -208,7 +208,7 @@ func TestDrinkConsume(t *testing.T) {
 			result, err := ConsumeDrink(tt.name)
 			machineIngredients := GetMachineIngredients()
 			if result != tt.result || err.Error() != tt.err.Error() {
-				t.Errorf("TestDrinkConsume got %v, want %v, err %v, status of all ingredients %v", result, tt.result, err, machineIngredients)
+				t.Errorf("TestDrinkConsume got %v, want %v, got error: %v, want error: %v, status of all ingredients %v", result, tt.result, err, tt.err, machineIngredients)
 			}
 		})
 	}
@@ -241,7 +241,7 @@ func TestDrinkConsume(t *testing.T) {
 	}
 
 	t.Cleanup(func() {
-		_, _ = UpdateIngredientPut(ingredientTestCleanUpInDrink)
+		_, _ = CleanupIngredients()
 	})
 }
 

@@ -18,6 +18,17 @@ var (
 	drinks = make(map[string]Drink)
 )
 
+func (drink *Drink) ValidationDrink() (bool, error) {
+	if drink.Money < 0 {
+		return false, fmt.Errorf("Drink must have non negative values for ingredients and money %v", *drink)
+	}
+	if drink.Water == 0 && drink.Milk == 0 && drink.Sugar == 0 &&
+		drink.CoffeeBeans == 0 && drink.TeaBeans == 0 && drink.Cups == 0 {
+		return false, fmt.Errorf("Drink must have at least one 0 or positive value for ingridients %v", *drink)
+	}
+	return true, nil
+}
+
 func GetAvailableDrinks() map[string]Drink {
 	return drinks
 }
@@ -35,16 +46,12 @@ func GetDrinkByName(name string) Drink {
 }
 
 func AddDrink(name string, drink Drink) (Drink, error) {
-	if drink.Water < 0 || drink.Milk < 0 || drink.Sugar < 0 ||
-		drink.CoffeeBeans < 0 || drink.TeaBeans < 0 || drink.Cups < 0 || drink.Money < 0 {
-		return Drink{}, fmt.Errorf("Drink must have non negative values for ingredients and money %v", drink)
-	}
-	if drink.Water <= 0 && drink.Milk <= 0 && drink.Sugar <= 0 &&
-		drink.CoffeeBeans <= 0 && drink.TeaBeans <= 0 && drink.Cups <= 0 && drink.Money <= 0 {
-		return Drink{}, fmt.Errorf("Drink must have at least one 0 or positive value %v", drink)
+	validation, err := drink.ValidationDrink()
+	if !validation {
+		return drink, err
 	}
 	_, drinkExist := drinks[name]
-	if drinkExist == true {
+	if drinkExist {
 		return drink, fmt.Errorf("Drink already exists '%v'", drinks[name])
 	}
 	drinks[name] = drink
@@ -53,7 +60,7 @@ func AddDrink(name string, drink Drink) (Drink, error) {
 
 func RemoveDrink(name string) (bool, error) {
 	_, drinkExist := drinks[name]
-	if drinkExist != true {
+	if !drinkExist {
 		return false, fmt.Errorf("Drink doesn't exists '%v'", drinks[name])
 	} else {
 		delete(drinks, name)
@@ -78,7 +85,7 @@ func ConsumeDrink(name string) (bool, error) {
 
 func CheckPrereqForDrink(name string) (bool, float64, error) {
 	_, drinkExist := drinks[name]
-	if drinkExist == true {
+	if drinkExist {
 		if (int(machineIngredients.Water)-int(drinks[name].Water)) < 0 ||
 			(int(machineIngredients.Milk)-int(drinks[name].Milk)) < 0 ||
 			(int(machineIngredients.Sugar)-int(drinks[name].Sugar)) < 0 ||

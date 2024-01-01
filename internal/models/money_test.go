@@ -181,15 +181,15 @@ func TestUpdateDenominationPatch(t *testing.T) {
 		moneyTestPatch.Half = -1
 		moneyTestPatch.One = 6
 		moneyTestPatch.Two = 6
-		result, _ := UpdateDenominationPatch(moneyTestPatch)
-		if result.One != 6 && result.Two != 6 && result.Half != 5 {
-			t.Errorf("There should be 6 denominations of One and 6 denominations of Two and old 5 denominations of Half, got: result = %v", result)
+		_, errNegative := UpdateDenominationPatch(moneyTestPatch)
+		if errNegative == nil {
+			t.Errorf("There should be an error because denomination value cannot be negative, got: result = %v", errNegative)
 		}
 	})
 
 	testnameMoney = fmt.Sprintf("%s", "PatchFiveAndTen")
 	t.Run(testnameMoney, func(t *testing.T) {
-		moneyTestPatch.Half = -1
+		moneyTestPatch.Half = 0
 		moneyTestPatch.One = 0
 		moneyTestPatch.Two = 0
 		moneyTestPatch.Five = 6

@@ -5,12 +5,13 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/controllers"
-	_ "github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/docs"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/controllers"
+	_ "github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/docs"
 )
 
 // @title CoffeeMachine Swagger API

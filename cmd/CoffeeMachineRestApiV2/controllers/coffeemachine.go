@@ -34,6 +34,7 @@ var (
 // register route for coffeemachine in gin framework
 func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 	router.POST("", postInitializeMachine)
+	router.DELETE("", deleteDeInitializeMachine)
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("validateDenomination", validateDenomination)
 		v.RegisterStructValidation(validateIngredient, Ingredient{})
@@ -78,6 +79,38 @@ func postInitializeMachine(c *gin.Context) {
 	machineInitialized = true
 	log.Infof("coffeeMachine initialized with following parameters: Ingredients: %v Money: %v", cm, mm)
 	c.JSON(http.StatusOK, fmt.Sprintf("Ingredients: %v Money: %v", cm, mm))
+}
+
+// deleteDeInitializeMachine godoc
+// @Summary DeInitialize Machine
+// @Description DeInitialize Machine based
+// @Accept json
+// @Produce json
+// @Success 200 {object} CoffeeMachine
+// @Failure 400,404
+// @Failure 500
+// @Router / [delete]
+func deleteDeInitializeMachine(c *gin.Context) {
+	if machineInitialized == false {
+		log.Errorf("coffeeMachine cannot be deinitialized more than once")
+		c.JSON(http.StatusBadRequest, "Machine already DeInitialized")
+		return
+	}
+	_, errIng := models.CleanupIngredients()
+	if errIng != nil {
+		c.JSON(http.StatusBadRequest, "Could not DeInitialize Coffee Machine object")
+		log.Errorf("coffeeMachine could not be DeInitialized")
+		return
+	}
+	_, errDen := models.CleanupDenominations()
+	if errDen != nil {
+		c.JSON(http.StatusBadRequest, "Could not DeInitialize Coffee Machine object")
+		log.Errorf("coffeeMachine could not be DeInitialized")
+		return
+	}
+	machineInitialized = false
+	log.Infof("coffeeMachine deinitialized")
+	c.JSON(http.StatusOK, fmt.Sprintf(""))
 }
 
 func checkCoffeeMachineFromReq(c *gin.Context) (models.Ingredient, models.Denomination, error) {
