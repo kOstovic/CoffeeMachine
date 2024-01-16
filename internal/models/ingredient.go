@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"reflect"
+
+	"gorm.io/gorm"
 )
 
 type Ingredient struct {
@@ -14,20 +16,67 @@ type Ingredient struct {
 	Cups        uint16
 }
 
+type IngredientDB struct {
+	gorm.Model
+	TenantName  string `gorm:"type:varchar(60);uniqueIndex"`
+	Water       uint16
+	Milk        uint16
+	Sugar       uint16
+	CoffeeBeans uint16
+	TeaBeans    uint16
+	Cups        uint16
+}
+
+func (ingredientDB *IngredientDB) ConvertIngredientDBToIngredient() Ingredient {
+	return Ingredient{
+		Water:       ingredientDB.Water,
+		Milk:        ingredientDB.Milk,
+		Sugar:       ingredientDB.Sugar,
+		CoffeeBeans: ingredientDB.CoffeeBeans,
+		TeaBeans:    ingredientDB.TeaBeans,
+		Cups:        ingredientDB.Cups,
+	}
+}
+
+func (ingredient *Ingredient) ConvertIngredientToIngredientDB(tenantName string) IngredientDB {
+	return IngredientDB{
+		TenantName:  tenantName,
+		Water:       ingredient.Water,
+		Milk:        ingredient.Milk,
+		Sugar:       ingredient.Sugar,
+		CoffeeBeans: ingredient.CoffeeBeans,
+		TeaBeans:    ingredient.TeaBeans,
+		Cups:        ingredient.Cups,
+	}
+}
+
 var (
 	machineIngredients *Ingredient = new(Ingredient)
 )
+
+func (ing *Ingredient) ValidationIngredient() (bool, error) {
+	if ing.Water == 0 && ing.Milk == 0 && ing.Sugar == 0 &&
+		ing.CoffeeBeans == 0 && ing.TeaBeans == 0 && ing.Cups == 0 {
+		return false, fmt.Errorf("Ingredient structure must have at least one non zero value %v", ing)
+	}
+	return true, nil
+}
 
 func GetMachineIngredients() *Ingredient {
 	return machineIngredients
 }
 
 func InitializeIngredients(ing Ingredient) (Ingredient, error) {
-	if ing.Water <= 0 && ing.Milk <= 0 && ing.Sugar <= 0 &&
-		ing.CoffeeBeans <= 0 && ing.TeaBeans <= 0 && ing.Cups <= 0 {
-		return Ingredient{}, fmt.Errorf("Initializing CoffeMachine must have some Ingredients to work %v", ing)
+	validation, err := ing.ValidationIngredient()
+	if !validation {
+		return Ingredient{}, err
 	}
 	machineIngredients = &ing
+	return *machineIngredients, nil
+}
+
+func CleanupIngredients() (Ingredient, error) {
+	machineIngredients = new(Ingredient)
 	return *machineIngredients, nil
 }
 
@@ -42,6 +91,10 @@ func GetIngredienteValueByName(ingredient string) (string, error) {
 }
 
 func UpdateIngredientPatch(ing Ingredient) (Ingredient, error) {
+	validation, err := ing.ValidationIngredient()
+	if !validation {
+		return Ingredient{}, err
+	}
 	if ing.Water > 0 {
 		machineIngredients.Water = ing.Water
 	}
@@ -64,13 +117,17 @@ func UpdateIngredientPatch(ing Ingredient) (Ingredient, error) {
 }
 
 func UpdateIngredientPut(ing Ingredient) (Ingredient, error) {
+
+	validation, err := ing.ValidationIngredient()
+	if !validation {
+		return Ingredient{}, err
+	}
 	machineIngredients.Water = ing.Water
 	machineIngredients.Milk = ing.Milk
 	machineIngredients.Sugar = ing.Sugar
 	machineIngredients.CoffeeBeans = ing.CoffeeBeans
 	machineIngredients.TeaBeans = ing.TeaBeans
 	machineIngredients.Cups = ing.Cups
-
 	return *machineIngredients, nil
 }
 

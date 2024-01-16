@@ -907,6 +907,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "DELETE Deinitialize http://localhost:3000/coffeemachine/ingredients",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "name",
+						"type": "text",
+						"value": "tea",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/coffeemachine/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"coffeemachine",
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

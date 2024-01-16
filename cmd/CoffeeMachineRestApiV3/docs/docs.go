@@ -69,6 +69,33 @@ var doc = `{
                         "description": ""
                     }
                 }
+            },
+            "delete": {
+                "description": "DeInitialize Machine based",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "DeInitialize Machine",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.CoffeeMachine"
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "404": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
             }
         },
         "/drinks": {
@@ -84,7 +111,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Drink"
+                                "$ref": "#/definitions/controllers.Drink"
                             }
                         }
                     }
@@ -121,7 +148,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Drink"
+                            "$ref": "#/definitions/controllers.Drink"
                         }
                     },
                     "400": {
@@ -145,6 +172,41 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "name of drink to delete",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "404": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/drinks/activate": {
+            "post": {
+                "description": "Activate drink from machine on given name",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Activate drink from machine on given name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name of drink to activate",
                         "name": "name",
                         "in": "query",
                         "required": true
@@ -219,7 +281,42 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Denomination"
+                            "$ref": "#/definitions/controllers.Denomination"
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "404": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/drinks/deactivate": {
+            "delete": {
+                "description": "Deactivate drink from machine on given name",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Deactivate drink from machine on given name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name of drink to deactivate",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
                         }
                     },
                     "400": {
@@ -253,7 +350,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Ingredient"
+                            "$ref": "#/definitions/controllers.Ingredient"
                         }
                     },
                     "400": {
@@ -296,7 +393,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Ingredient"
+                            "$ref": "#/definitions/controllers.Ingredient"
                         }
                     },
                     "400": {
@@ -334,7 +431,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Ingredient"
+                            "$ref": "#/definitions/controllers.Ingredient"
                         }
                     },
                     "400": {
@@ -368,7 +465,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Denomination"
+                            "$ref": "#/definitions/controllers.Denomination"
                         }
                     },
                     "400": {
@@ -411,7 +508,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Denomination"
+                            "$ref": "#/definitions/controllers.Denomination"
                         }
                     },
                     "400": {
@@ -449,7 +546,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Ingredient"
+                            "$ref": "#/definitions/controllers.Ingredient"
                         }
                     },
                     "400": {
@@ -542,78 +639,6 @@ var doc = `{
                     "type": "integer"
                 },
                 "Water": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Denomination": {
-            "type": "object",
-            "properties": {
-                "five": {
-                    "type": "integer"
-                },
-                "half": {
-                    "type": "integer"
-                },
-                "one": {
-                    "type": "integer"
-                },
-                "ten": {
-                    "type": "integer"
-                },
-                "total": {
-                    "type": "number"
-                },
-                "two": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Drink": {
-            "type": "object",
-            "properties": {
-                "coffeeBeans": {
-                    "type": "integer"
-                },
-                "cups": {
-                    "type": "integer"
-                },
-                "milk": {
-                    "type": "integer"
-                },
-                "money": {
-                    "type": "number"
-                },
-                "sugar": {
-                    "type": "integer"
-                },
-                "teaBeans": {
-                    "type": "integer"
-                },
-                "water": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Ingredient": {
-            "type": "object",
-            "properties": {
-                "coffeeBeans": {
-                    "type": "integer"
-                },
-                "cups": {
-                    "type": "integer"
-                },
-                "milk": {
-                    "type": "integer"
-                },
-                "sugar": {
-                    "type": "integer"
-                },
-                "teaBeans": {
-                    "type": "integer"
-                },
-                "water": {
                     "type": "integer"
                 }
             }

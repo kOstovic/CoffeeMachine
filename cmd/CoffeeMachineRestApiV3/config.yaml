@@ -1,0 +1,13 @@
+database:
+  type: "postgresql"
+  host: "172.17.0.2"
+  user: "postgres"
+  password: "password"
+  port: "5432"
+  parameters: "sslmode=disable TimeZone=Europe/Zagreb"
+  dbname_ingredient: "ingredient"
+  dbname_denomination: "denomination"
+  dbname_drinks: "drinks"
+  initialized: "false"
+log:
+  level: "debug"

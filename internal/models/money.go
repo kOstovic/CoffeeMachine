@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"reflect"
+
+	"gorm.io/gorm"
 )
 
 type Denomination struct {
@@ -14,22 +16,83 @@ type Denomination struct {
 	Total float64
 }
 
+type DenominationDB struct {
+	gorm.Model
+	TenantName string `gorm:"type:varchar(60);uniqueIndex"`
+	Half       int
+	One        int
+	Two        int
+	Five       int
+	Ten        int
+	Total      float64
+}
+
 var (
 	money *Denomination = new(Denomination)
 )
+
+func (denominationDB *DenominationDB) ConvertDenominationDBToDenomination() Denomination {
+	denominationDB.CalculateTotal()
+	return Denomination{
+		Half:  denominationDB.Half,
+		One:   denominationDB.One,
+		Two:   denominationDB.Two,
+		Five:  denominationDB.Five,
+		Ten:   denominationDB.Ten,
+		Total: denominationDB.Total,
+	}
+}
+
+func (denomination *Denomination) ConvertDenominationToDenominationDB(tenantName string) DenominationDB {
+	denomination.CalculateTotal()
+	return DenominationDB{
+		TenantName: tenantName,
+		Half:       denomination.Half,
+		One:        denomination.One,
+		Two:        denomination.Two,
+		Five:       denomination.Five,
+		Ten:        denomination.Ten,
+		Total:      denomination.Total,
+	}
+}
 
 func GetCurrentMoney() *Denomination {
 	return money
 }
 
-func InitializeDenominations(d Denomination) (Denomination, error) {
+func (d *Denomination) ValidationDenomination() (bool, error) {
 	if d.Half < 0 || d.One < 0 || d.Two < 0 ||
 		d.Five < 0 || d.Ten < 0 {
-		return Denomination{}, fmt.Errorf("Initializing CoffeMachine must have money to work %v", d)
+		return false, fmt.Errorf("Values in Denomination cannot be negative'%v'", d)
+	}
+	if d.Half == 0 && d.One == 0 && d.Two == 0 &&
+		d.Five == 0 && d.Ten == 0 {
+		return false, fmt.Errorf("Denomination struct must have at least one non zero value")
+	}
+	return true, nil
+}
+
+func (d *Denomination) CalculateTotal() {
+	d.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
+}
+
+func (d *DenominationDB) CalculateTotal() {
+	d.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
+}
+
+func InitializeDenominations(d Denomination) (Denomination, error) {
+	validation, err := d.ValidationDenomination()
+	if !validation {
+		return Denomination{}, err
 	}
 
-	d.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
+	d.CalculateTotal()
 	money = &d
+	return *money, nil
+}
+
+func CleanupDenominations() (Denomination, error) {
+	money = new(Denomination)
 	return *money, nil
 }
 
@@ -44,23 +107,23 @@ func GetDenominationValueByName(denomination string) (string, error) {
 }
 
 func UpdateDenominationPut(d Denomination) (Denomination, error) {
-	if d.Half < 0 || d.One < 0 || d.Two < 0 ||
-		d.Five < 0 || d.Ten < 0 {
-		return Denomination{}, fmt.Errorf("Values in Denomination cannot be negative'%v'", d)
+	validation, err := d.ValidationDenomination()
+	if !validation {
+		return Denomination{}, err
 	}
 	money.Half = d.Half
 	money.One = d.One
 	money.Two = d.Two
 	money.Five = d.Five
 	money.Ten = d.Ten
-	money.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
+	money.CalculateTotal()
 
 	return *money, nil
 }
 
 func UpdateDenominationValueByName(denomination string, value int) (Denomination, error) {
 	if value < 0 {
-		return Denomination{}, fmt.Errorf("Value cannot be negative'%v'", value)
+		return Denomination{}, fmt.Errorf("Value in Denomination cannot be negative'%v'", value)
 	}
 	switch denomination {
 	case "Half":
@@ -76,11 +139,16 @@ func UpdateDenominationValueByName(denomination string, value int) (Denomination
 	default:
 		return Denomination{}, fmt.Errorf("Denomination with name '%s' not found", denomination)
 	}
-	money.Total = float64(money.Half)*0.5 + float64(money.One) + float64(money.Two)*2 + float64(money.Five)*5 + float64(money.Ten)*10
+	money.CalculateTotal()
 	return *money, nil
 }
 
 func UpdateDenominationPatch(d Denomination) (Denomination, error) {
+	validation, err := d.ValidationDenomination()
+	if !validation {
+		return Denomination{}, err
+	}
+
 	if d.Half > 0 {
 		money.Half = d.Half
 	}
@@ -96,7 +164,7 @@ func UpdateDenominationPatch(d Denomination) (Denomination, error) {
 	if d.Ten > 0 {
 		money.Ten = d.Ten
 	}
-	money.Total = float64(money.Half)*0.5 + float64(money.One) + float64(money.Two)*2 + float64(money.Five)*5 + float64(money.Ten)*10
+	money.CalculateTotal()
 	return *money, nil
 }
 
@@ -120,12 +188,27 @@ func UpdateDenominationConsume(d Denomination, cost float64) (Denomination, erro
 	if denCal.Ten != 0 {
 		money.Ten += denCal.Ten
 	}
-	money.Total = float64(money.Half)*0.5 + float64(money.One) + float64(money.Two)*2 + float64(money.Five)*5 + float64(money.Ten)*10
+	money.CalculateTotal()
 	return denRet, nil
 }
 
+func CalculateDenominationAfterConsume(d Denomination, cost float64) (Denomination, error) {
+	newDen := Denomination{}
+	prereq, denCal, _, err := CheckPrereqForMoney(d, cost)
+	if prereq == false {
+		return *money, err
+	}
+	newDen.Half = money.Half + denCal.Half
+	newDen.One = money.One + denCal.One
+	newDen.Two = money.Two + denCal.Two
+	newDen.Five = money.Five + denCal.Five
+	newDen.Ten = money.Ten + denCal.Ten
+	newDen.CalculateTotal()
+	return newDen, nil
+}
+
 func CheckPrereqForMoney(d Denomination, cost float64) (bool, Denomination, Denomination, error) {
-	d.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
+	d.CalculateTotal()
 	if d.Total == cost {
 		return true, d, Denomination{}, nil
 	} else if d.Total < cost {

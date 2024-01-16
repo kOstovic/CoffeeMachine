@@ -1,3 +1,6 @@
+<CoffeeMachine PoC software in golang>
+Copyright (C) <2024>  <Krešimir Ostović>
+
 # CoffeeMachine
 CoffeeMachine Rest API and Console APP implementation in GoLang used for learning GoLang.
 
@@ -12,7 +15,7 @@ CoffeeMachine Rest API and Console APP implementation in GoLang used for learnin
 >  - /coffeemachine/money
 > - for checking all available drinks, adding them and consuming them   
 >  - /coffeemachine/drinks
-> -  /coffeemachine/swagger/index.html swagger endpoint in restAPIv2
+> -  /coffeemachine/swagger/index.html swagger endpoint in restapiv3
 
 #### Console APP version CoffeeMachine has command structure:
 
@@ -71,7 +74,7 @@ Denomination struct {
 ```
 ## Running CoffeeMachineRestApi
 
-Same is for CoffeeMachineRestApiV1 and CoffeeMachineRestApiV2
+Same is for CoffeeMachineRestApiV1 and CoffeeMachineRestApiV3
 Run command in cmd/CoffeeMachineRestApi
 ```
 go build -o coffeeMachine.exe main.go
@@ -81,7 +84,7 @@ and run coffeeMachine.exe
 API is running in localhost:3000
 (port will be customizable in future refactor)
 
-Postman collection can be used for testing or just go to swagger endpoint in CoffeeMachineRestApiV2.
+Postman collection can be used for testing or just go to swagger endpoint in CoffeeMachineRestApiV3.
 Metrics endpoint is exposed on /metrics 
 Health endpoint is exposed on /coffeemachine/health
 Logging level can be set with environment variable "LOG_LEVEL" in runtime
@@ -108,9 +111,9 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv2:0.9.0
+docker run -p 3000:3000 github.com/kostovic/coffeemachine/restapiv3:0.10.0
 ```
-restapiv2.0 is running in production mode by default
+restapiv3.0 is running in production mode by default
 
 ## Docker Compose
 
@@ -132,3 +135,16 @@ helm delete my-release
 ```
 
 More in README.md in HELM/CoffeeMachineChart folder
+
+
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details or check LICENSE 
+file in root of this repository.

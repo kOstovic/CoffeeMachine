@@ -102,7 +102,7 @@ func TestPatchIngredient(t *testing.T) {
 		err   error
 	}{
 		{Ingredient{Water: 5, Milk: 5, Sugar: 5, CoffeeBeans: 5, TeaBeans: 5, Cups: 5}, Ingredient{Water: 5, Milk: 5, Sugar: 5, CoffeeBeans: 5, TeaBeans: 5, Cups: 5}, nil},
-		{Ingredient{Water: 0}, Ingredient{Water: 5, Milk: 5, Sugar: 5, CoffeeBeans: 5, TeaBeans: 5, Cups: 5}, nil},
+		{Ingredient{Water: 0}, Ingredient{Water: 0, Milk: 0, Sugar: 0, CoffeeBeans: 0, TeaBeans: 0, Cups: 0}, fmt.Errorf("Ingredient structure must have at least one non zero value %v", Ingredient{})},
 		{Ingredient{Water: 10}, Ingredient{Water: 10, Milk: 5, Sugar: 5, CoffeeBeans: 5, TeaBeans: 5, Cups: 5}, nil},
 		{Ingredient{Milk: 5}, Ingredient{Water: 10, Milk: 5, Sugar: 5, CoffeeBeans: 5, TeaBeans: 5, Cups: 5}, nil},
 		{Ingredient{Milk: 6}, Ingredient{Water: 10, Milk: 6, Sugar: 5, CoffeeBeans: 5, TeaBeans: 5, Cups: 5}, nil},
