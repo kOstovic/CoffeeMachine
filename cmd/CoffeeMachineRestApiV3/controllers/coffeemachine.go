@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV3/repository"
 	"github.com/kOstovic/CoffeeMachine/internal/models"
 	log "github.com/sirupsen/logrus"
 )
@@ -26,14 +27,10 @@ type CoffeeMachine struct {
 	Denomination Denomination `form:"Money" json:"Money" binding:"validateDenomination"`
 }
 
-// machineInitialized is private variable used for checking whether machine has been initialized
-var (
-	machineInitialized bool = false
-)
-
 // register route for coffeemachine in gin framework
 func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 	router.POST("", postInitializeMachine)
+	router.DELETE("", deleteDeInitializeMachine)
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("validateDenomination", validateDenomination)
 		v.RegisterStructValidation(validateIngredient, Ingredient{})
@@ -51,7 +48,7 @@ func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 // @Failure 500
 // @Router / [post]
 func postInitializeMachine(c *gin.Context) {
-	if machineInitialized == true {
+	if repository.MachineInitialized == true {
 		log.Errorf("coffeeMachine cannot be initialized more than once")
 		c.JSON(http.StatusBadRequest, "Machine already Initialized")
 		return
@@ -63,21 +60,40 @@ func postInitializeMachine(c *gin.Context) {
 		log.Errorf("coffeeMachine could not be initialized " + err.Error())
 		return
 	}
-	cm, errIng := models.InitializeIngredients(iModel)
-	if errIng != nil {
-		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object "+err.Error())
-		log.Errorf("coffeeMachine could not be initialized " + err.Error())
+	_, errRepo := repository.InitializeMachine(iModel, mModel)
+	if errRepo != nil {
+		c.JSON(checkErrCode(errRepo), "Could not Initialize Coffee Machine object "+errRepo.Error())
+		log.Errorf("coffeeMachine could not be initialized " + errRepo.Error())
 		return
 	}
-	mm, errDen := models.InitializeDenominations(mModel)
-	if errDen != nil {
-		c.JSON(http.StatusBadRequest, "Could not Initialize Coffee Machine object "+err.Error())
-		log.Errorf("coffeeMachine could not be initialized " + err.Error())
+	mModel.CalculateTotal()
+
+	log.Infof("coffeeMachine initialized with following parameters: Ingredients: %v Money: %v", iModel, mModel)
+	c.JSON(http.StatusOK, fmt.Sprintf("Ingredients: %v Money: %v", iModel, mModel))
+}
+
+// deleteDeInitializeMachine godoc
+// @Summary DeInitialize Machine
+// @Description DeInitialize Machine based
+// @Accept json
+// @Produce json
+// @Success 200 {object} CoffeeMachine
+// @Failure 400,404
+// @Failure 500
+// @Router / [delete]
+func deleteDeInitializeMachine(c *gin.Context) {
+	if repository.MachineInitialized == false {
+		log.Errorf("coffeeMachine cannot be deinitialized more than once")
+		c.JSON(http.StatusBadRequest, "Machine already DeInitialized")
 		return
 	}
-	machineInitialized = true
-	log.Infof("coffeeMachine initialized with following parameters: Ingredients: %v Money: %v", cm, mm)
-	c.JSON(http.StatusOK, fmt.Sprintf("Ingredients: %v Money: %v", cm, mm))
+	_, errdeinit := repository.DeleteDeInitializeMachine()
+	if errdeinit != nil {
+		c.JSON(checkErrCode(errdeinit), "Could not DeInitialize Coffee Machine object "+errdeinit.Error())
+		return
+	}
+	log.Infof("coffeeMachine deinitialized")
+	c.JSON(http.StatusOK, fmt.Sprintf("coffeeMachine deinitialized"))
 }
 
 func checkCoffeeMachineFromReq(c *gin.Context) (models.Ingredient, models.Denomination, error) {
@@ -115,5 +131,4 @@ func validateIngredient(sl validator.StructLevel) {
 			ing.CoffeeBeans <= 0 && ing.TeaBeans <= 0 && ing.Cups <= 0) {
 		sl.ReportError(ing, "One of ingredients is not valid", "Ingredient", "Ingredient", "")
 	}
-
 }

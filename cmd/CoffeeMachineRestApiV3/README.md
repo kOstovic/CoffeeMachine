@@ -1,3 +1,6 @@
+<CoffeeMachine PoC software in golang>
+Copyright (C) <2024>  <Krešimir Ostović>
+
 # CoffeeMachine
 CoffeeMachine Rest API implementation in GoLang used for learning GoLang.
 
@@ -15,13 +18,13 @@ CoffeeMachine has endpoint:
 > - utility
 >  - /metrics
 >  - /coffeemachine/health
-> -  /coffeemachine/swagger/index.html swagger endpoint in restAPIv2
+> -  /coffeemachine/swagger/index.html swagger endpoint in restapiv3
 
-## Running CoffeeMachineRestApiV2
+## Running CoffeeMachineRestApiV3
 
-Implementation is in-memory only.
+While V2 was inmemory only, V3 uses database with implemenation supported currently in postgresql.
 
-Run command in cmd/CoffeeMachineRestApiV2
+Run command in cmd/CoffeeMachineRestApiV3
 ```
 go build -o coffeeMachine.exe main.go
 ```
@@ -33,8 +36,24 @@ API is running in localhost:3000
 Postman collection can be used for testing.
 Metrics endpoint is exposed on /metrics 
 Health endpoint is exposed on /coffeemachine/health
-Logging level can be set with environment variable "LOG_LEVEL" in runtime
+Config parameters can be set either in config.yaml or as environment variables
 
+config structure:
+```yaml
+database:
+  type: "postgresql"
+  host: "172.17.0.2"
+  user: "postgres"
+  password: "password"
+  port: "5432"
+  parameters: "sslmode=disable TimeZone=Europe/Zagreb"
+  dbname_ingredient: "ingredient"
+  dbname_denomination: "denomination"
+  dbname_drinks: "drinks"
+  initialized: "false"
+log:
+  level: "debug"
+```
 ## Docker
 
 Currently, building Dockerfile from deployments/apiVersion/Dockerfile
@@ -45,5 +64,5 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv2:0.9.0
+docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv3:0.10.0
 ```

@@ -52,53 +52,6 @@ definitions:
       Water:
         type: integer
     type: object
-  models.Denomination:
-    properties:
-      five:
-        type: integer
-      half:
-        type: integer
-      one:
-        type: integer
-      ten:
-        type: integer
-      total:
-        type: number
-      two:
-        type: integer
-    type: object
-  models.Drink:
-    properties:
-      coffeeBeans:
-        type: integer
-      cups:
-        type: integer
-      milk:
-        type: integer
-      money:
-        type: number
-      sugar:
-        type: integer
-      teaBeans:
-        type: integer
-      water:
-        type: integer
-    type: object
-  models.Ingredient:
-    properties:
-      coffeeBeans:
-        type: integer
-      cups:
-        type: integer
-      milk:
-        type: integer
-      sugar:
-        type: integer
-      teaBeans:
-        type: integer
-      water:
-        type: integer
-    type: object
 info:
   contact:
     name: API Support
@@ -111,6 +64,24 @@ info:
   version: "2.0"
 paths:
   /:
+    delete:
+      consumes:
+      - application/json
+      description: DeInitialize Machine based
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.CoffeeMachine'
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: DeInitialize Machine
     post:
       consumes:
       - application/json
@@ -168,7 +139,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Drink'
+              $ref: '#/definitions/controllers.Drink'
             type: array
       summary: Get all drinks available
     post:
@@ -193,7 +164,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Drink'
+            $ref: '#/definitions/controllers.Drink'
         "400":
           description: ""
         "404":
@@ -201,6 +172,29 @@ paths:
         "500":
           description: ""
       summary: Initialize new drink to consume on given Drink json
+  /drinks/activate:
+    post:
+      description: Activate drink from machine on given name
+      parameters:
+      - description: name of drink to activate
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: Activate drink from machine on given name
   /drinks/consume:
     get:
       description: Consumes Drink over
@@ -236,7 +230,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Denomination'
+            $ref: '#/definitions/controllers.Denomination'
         "400":
           description: ""
         "404":
@@ -244,6 +238,29 @@ paths:
         "500":
           description: ""
       summary: Consumes Drink over
+  /drinks/deactivate:
+    delete:
+      description: Deactivate drink from machine on given name
+      parameters:
+      - description: name of drink to deactivate
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: Deactivate drink from machine on given name
   /ingredients:
     get:
       description: Get ingredient by name from query
@@ -258,7 +275,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Ingredient'
+            $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
         "404":
@@ -282,7 +299,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Ingredient'
+            $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
         "404":
@@ -313,7 +330,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Ingredient'
+            $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
         "404":
@@ -336,7 +353,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Denomination'
+            $ref: '#/definitions/controllers.Denomination'
         "400":
           description: ""
         "404":
@@ -360,7 +377,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Ingredient'
+            $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
         "404":
@@ -391,7 +408,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Denomination'
+            $ref: '#/definitions/controllers.Denomination'
         "400":
           description: ""
         "404":

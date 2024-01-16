@@ -13,7 +13,7 @@ jobs:
           go-version: 1.21
       - name: Set variables
         run: |
-          VER=$(cat deployments/CoffeeMachineRestApiV2/sem.ver)
+          VER=$(cat deployments/CoffeeMachineRestApiV3/sem.ver)
           echo "VERSION=$VER" >> $GITHUB_ENV
       - name: Run linting
         run: |
@@ -23,20 +23,20 @@ jobs:
         run: go test ./internal/models
       - name: Create build directory
         run : |
-          mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine
-          mkdir deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd
-          cp -R internal deployments/CoffeeMachineRestApiV2/CoffeeMachine/internal
-          cp -R cmd/CoffeeMachineRestApiV2 deployments/CoffeeMachineRestApiV2/CoffeeMachine/cmd/CoffeeMachineRestApiV2
-          cp go.mod deployments/CoffeeMachineRestApiV2/CoffeeMachine
-          cp go.sum deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          mkdir deployments/CoffeeMachineRestApiV3/CoffeeMachine
+          mkdir deployments/CoffeeMachineRestApiV3/CoffeeMachine/cmd
+          cp -R internal deployments/CoffeeMachineRestApiV3/CoffeeMachine/internal
+          cp -R cmd/CoffeeMachineRestApiV3 deployments/CoffeeMachineRestApiV3/CoffeeMachine/cmd/CoffeeMachineRestApiV3
+          cp go.mod deployments/CoffeeMachineRestApiV3/CoffeeMachine
+          cp go.sum deployments/CoffeeMachineRestApiV3/CoffeeMachine
       - name: Build Docker image
         uses: docker/build-push-action@v5.1.0
         with:
           # Build's context is the set of files located in the specified PATH or URL
-          context: deployments/CoffeeMachineRestApiV2/CoffeeMachine
+          context: deployments/CoffeeMachineRestApiV3/CoffeeMachine
           # Path to the Dockerfile
           build-args: --progress=plain
-          file: ./deployments/CoffeeMachineRestApiV2/Dockerfile
+          file: ./deployments/CoffeeMachineRestApiV3/Dockerfile
           # List of tags
-          tags: github.com/kostovic/coffeemachine/restapiv2:${{ env.VERSION }}.${{github.run_number}}
+          tags: github.com/kostovic/coffeemachine/restapiv3:${{ env.VERSION }}.${{github.run_number}}
 

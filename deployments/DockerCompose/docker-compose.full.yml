@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  coffeemachine:
+    image: "${COFFEEMACHINE_IMAGE}:${COFFEEMACHINE_TAG}"
+    ports: 
+      - "${COFFEEMACHINE_HTTP_PORT}:3000"
+    env_file:
+     - ./.env
+    environment:
+      - GIN_MODE=${GIN_MODE}
+      - database_type=${database_type}
+      - database_host=${database_host}
+      - database_user=${database_user}
+      - database_password=${database_password}
+      - database_port=${database_port}
+      - database_parameters=${database_parameters}
+      - database_dbname_ingredient=${database_dbname_ingredient}
+      - database_dbname_denomination=${database_dbname_denomination}
+      - database_dbname_drinks=${database_dbname_drinks}
+      - database_initialized=${database_initialized}
+      - log_level=${log_level}
+
+  postgres.db:
+      image: "postgres:16.1-bullseye"
+      command: postgres -c 'max_connections=300' -c 'shared_buffers=500MB' -c 'logging_collector=on' -c 'log_statement=all' -c 'log_duration=on' -c 'log_min_duration_statement=1000'
+      environment:
+          - POSTGRES_PASSWORD=${database_password}
+      volumes:
+          - postgres_data:/var/lib/postgresql/data
+      ports:
+          - 5432:5432
+
+volumes:
+  postgres_data:
+    driver: loca

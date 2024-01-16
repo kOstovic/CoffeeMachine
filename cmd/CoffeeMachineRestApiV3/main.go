@@ -5,12 +5,15 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/controllers"
-	_ "github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV2/docs"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV3/config"
+	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV3/controllers"
+	_ "github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV3/docs"
+	"github.com/kOstovic/CoffeeMachine/cmd/CoffeeMachineRestApiV3/repository"
 )
 
 // @title CoffeeMachine Swagger API
@@ -27,17 +30,30 @@ import (
 // Package classification of Product API.
 func main() {
 
-	lvl, ok := os.LookupEnv("LOG_LEVEL")
+	if err := config.LoadConfig(&config.Configuration); err != nil {
+		log.Fatal(err.Error())
+		panic(err)
+	}
+	var lvl log.Level = log.DebugLevel
+	var err error
+	lvls, ok := os.LookupEnv("LOG_LEVEL")
 	// LOG_LEVEL not set, let's default to debug
 	if !ok {
-		lvl = "debug"
-	}
-	ll, err := log.ParseLevel(lvl)
-	if err != nil {
-		ll = log.DebugLevel
+		lvl, err = log.ParseLevel(config.Configuration.Log.LOG_LEVEL)
+		if err != nil {
+			lvl = log.DebugLevel
+		}
+	} else {
+		lvl, err = log.ParseLevel(lvls)
+		if err != nil {
+			lvl = log.DebugLevel
+		}
 	}
 	// set global log level
-	log.SetLevel(ll)
+	log.SetLevel(lvl)
+	log.Warnln("<CoffeeMachine>  Copyright (C) <2024>  <Kresimir Ostovic> This program comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute itunder certain conditions of AGPL 3.0 License.; Check LICENSE file in root of github repo or find license here: https://www.gnu.org/licenses/agpl-3.0.en.html")
+
+	repository.InitDatabaseFromConfig()
 
 	router := gin.New()
 	router.Use(gin.LoggerWithWriter(log.StandardLogger().WriterLevel(log.DebugLevel)))

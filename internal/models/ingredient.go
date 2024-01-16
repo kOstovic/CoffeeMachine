@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"reflect"
+
+	"gorm.io/gorm"
 )
 
 type Ingredient struct {
@@ -12,6 +14,40 @@ type Ingredient struct {
 	CoffeeBeans uint16
 	TeaBeans    uint16
 	Cups        uint16
+}
+
+type IngredientDB struct {
+	gorm.Model
+	TenantName  string `gorm:"type:varchar(60);uniqueIndex"`
+	Water       uint16
+	Milk        uint16
+	Sugar       uint16
+	CoffeeBeans uint16
+	TeaBeans    uint16
+	Cups        uint16
+}
+
+func (ingredientDB *IngredientDB) ConvertIngredientDBToIngredient() Ingredient {
+	return Ingredient{
+		Water:       ingredientDB.Water,
+		Milk:        ingredientDB.Milk,
+		Sugar:       ingredientDB.Sugar,
+		CoffeeBeans: ingredientDB.CoffeeBeans,
+		TeaBeans:    ingredientDB.TeaBeans,
+		Cups:        ingredientDB.Cups,
+	}
+}
+
+func (ingredient *Ingredient) ConvertIngredientToIngredientDB(tenantName string) IngredientDB {
+	return IngredientDB{
+		TenantName:  tenantName,
+		Water:       ingredient.Water,
+		Milk:        ingredient.Milk,
+		Sugar:       ingredient.Sugar,
+		CoffeeBeans: ingredient.CoffeeBeans,
+		TeaBeans:    ingredient.TeaBeans,
+		Cups:        ingredient.Cups,
+	}
 }
 
 var (

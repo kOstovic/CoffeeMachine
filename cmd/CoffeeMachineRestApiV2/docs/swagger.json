@@ -8,7 +8,7 @@
             "name": "API Support"
         },
         "license": {
-            "name": "Apache 2.0",
+            "name": "GNU AFFERO",
             "url": "https://github.com/kOstovic/coffeemachine/blob/master/LICENSE"
         },
         "version": "2.0"

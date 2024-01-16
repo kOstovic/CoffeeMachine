@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"reflect"
+
+	"gorm.io/gorm"
 )
 
 type Denomination struct {
@@ -14,9 +16,45 @@ type Denomination struct {
 	Total float64
 }
 
+type DenominationDB struct {
+	gorm.Model
+	TenantName string `gorm:"type:varchar(60);uniqueIndex"`
+	Half       int
+	One        int
+	Two        int
+	Five       int
+	Ten        int
+	Total      float64
+}
+
 var (
 	money *Denomination = new(Denomination)
 )
+
+func (denominationDB *DenominationDB) ConvertDenominationDBToDenomination() Denomination {
+	denominationDB.CalculateTotal()
+	return Denomination{
+		Half:  denominationDB.Half,
+		One:   denominationDB.One,
+		Two:   denominationDB.Two,
+		Five:  denominationDB.Five,
+		Ten:   denominationDB.Ten,
+		Total: denominationDB.Total,
+	}
+}
+
+func (denomination *Denomination) ConvertDenominationToDenominationDB(tenantName string) DenominationDB {
+	denomination.CalculateTotal()
+	return DenominationDB{
+		TenantName: tenantName,
+		Half:       denomination.Half,
+		One:        denomination.One,
+		Two:        denomination.Two,
+		Five:       denomination.Five,
+		Ten:        denomination.Ten,
+		Total:      denomination.Total,
+	}
+}
 
 func GetCurrentMoney() *Denomination {
 	return money
@@ -35,6 +73,10 @@ func (d *Denomination) ValidationDenomination() (bool, error) {
 }
 
 func (d *Denomination) CalculateTotal() {
+	d.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
+}
+
+func (d *DenominationDB) CalculateTotal() {
 	d.Total = float64(d.Half)*0.5 + float64(d.One) + float64(d.Two)*2 + float64(d.Five)*5 + float64(d.Ten)*10
 }
 
@@ -148,6 +190,21 @@ func UpdateDenominationConsume(d Denomination, cost float64) (Denomination, erro
 	}
 	money.CalculateTotal()
 	return denRet, nil
+}
+
+func CalculateDenominationAfterConsume(d Denomination, cost float64) (Denomination, error) {
+	newDen := Denomination{}
+	prereq, denCal, _, err := CheckPrereqForMoney(d, cost)
+	if prereq == false {
+		return *money, err
+	}
+	newDen.Half = money.Half + denCal.Half
+	newDen.One = money.One + denCal.One
+	newDen.Two = money.Two + denCal.Two
+	newDen.Five = money.Five + denCal.Five
+	newDen.Ten = money.Ten + denCal.Ten
+	newDen.CalculateTotal()
+	return newDen, nil
 }
 
 func CheckPrereqForMoney(d Denomination, cost float64) (bool, Denomination, Denomination, error) {
