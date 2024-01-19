@@ -95,10 +95,15 @@ func getConsumeDrink(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Success 200 {object} Drink
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /drinks [post]
+// @Security BearerAuth
 func postAddDrink(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(http.StatusBadRequest, "name in query is empty")
@@ -128,10 +133,15 @@ func postAddDrink(c *gin.Context) {
 // @Param name query string true "name of drink to activate"
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /drinks/activate [post]
+// @Security BearerAuth
 func postActivateDrink(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(http.StatusBadRequest, "name in query is empty")
@@ -155,10 +165,15 @@ func postActivateDrink(c *gin.Context) {
 // @Param name query string true "name of drink to deactivate"
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /drinks/deactivate [delete]
+// @Security BearerAuth
 func deleteDeactivateDrink(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(http.StatusBadRequest, "name in query is empty")
@@ -182,10 +197,15 @@ func deleteDeactivateDrink(c *gin.Context) {
 // @Param name query string true "name of drink to delete"
 // @Produce json
 // @Success 200 {object} bool
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /drinks [delete]
+// @Security BearerAuth
 func deleteRemoveDrink(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(http.StatusBadRequest, "name in query is empty")

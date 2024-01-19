@@ -46,8 +46,14 @@ func putIngredients(c *gin.Context) {
 // @Description Get all ingredients available
 // @Produce json
 // @Success 200 {array} Ingredient
+// @Failure 400,401,404
 // @Router /ingredients [get]
+// @Security BearerAuth
 func getAllIngredients(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	c.JSON(http.StatusOK, repository.GetMachineIngredients())
 }
 
@@ -57,9 +63,14 @@ func getAllIngredients(c *gin.Context) {
 // @Param name query string false "name of ingredient to get"
 // @Produce json
 // @Success 200 {object} Ingredient
-// @Failure 400,404
+// @Failure 400,401,404
 // @Router /ingredients [get]
+// @Security BearerAuth
 func getIngredientsByName(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	cm, err := repository.GetIngredientValueByName(name)
 	if err != nil {
@@ -77,10 +88,15 @@ func getIngredientsByName(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} Ingredient
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /ingredients [put]
+// @Security BearerAuth
 func putAllIngredients(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	cm, err := checkIngredientsFromBody(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -107,10 +123,15 @@ func putAllIngredients(c *gin.Context) {
 // @Param ingredient body Ingredient false "Update Ingredient object with Put option"
 // @Produce json
 // @Success 200 {object} Ingredient
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /ingredients [put]
+// @Security BearerAuth
 func putIngredientsByName(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	valueStr := c.Query("value")
 	if name == "" || valueStr == "" {
@@ -142,10 +163,15 @@ func putIngredientsByName(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} Ingredient
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /ingredients [patch]
+// @Security BearerAuth
 func patchIngredients(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	cm, err := checkIngredientsFromBody(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())

@@ -5,8 +5,13 @@ Copyright (C) <2024>  <Krešimir Ostović>
 CoffeeMachine Rest API implementation in GoLang used for learning GoLang.
 
 ## Endpoints
+Administrator endpoints are protected with Bearer token that you can get with /coffeemachine/login endpoint 
+with login from pre-seeded account at startup from config.yaml
+
 CoffeeMachine has endpoint:
 >
+> - to get bearer token used in authorized only endpoints
+>  - /coffeemachine/login
 > - for initializing
 >  - /coffeemachine
 > - for checking status of ingredient and updating Ingredient model
@@ -53,6 +58,9 @@ database:
   initialized: "false"
 log:
   level: "debug"
+auth:
+  username: "admin"
+  password: "mypass"
 ```
 ## Docker
 
@@ -64,5 +72,5 @@ Or just run BuildDocker.bat
 
 After that you can run this docker image for example on some other port like this:
 ```
-docker run -p 3002:3000 github.com/kostovic/coffeemachine/restapiv3:0.10.0
+docker run -p 3000:3000 github.com/kostovic/coffeemachine/restapiv3:0.10.0 -d
 ```

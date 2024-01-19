@@ -13,6 +13,8 @@ import (
 func checkErrCode(err error) int {
 	if strings.Contains(err.Error(), "duplicate key") || strings.Contains(err.Error(), "already exists") {
 		return http.StatusBadRequest
+	} else if strings.Contains(err.Error(), "unauthorized") {
+		return http.StatusUnauthorized
 	} else if strings.Contains(err.Error(), "database") {
 		return http.StatusInternalServerError
 	} else {

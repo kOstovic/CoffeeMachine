@@ -47,7 +47,12 @@ func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 // @Failure 400,404
 // @Failure 500
 // @Router / [post]
+// @Security BearerAuth
 func postInitializeMachine(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	if repository.MachineInitialized == true {
 		log.Errorf("coffeeMachine cannot be initialized more than once")
 		c.JSON(http.StatusBadRequest, "Machine already Initialized")
@@ -81,7 +86,12 @@ func postInitializeMachine(c *gin.Context) {
 // @Failure 400,404
 // @Failure 500
 // @Router / [delete]
+// @Security BearerAuth
 func deleteDeInitializeMachine(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	if repository.MachineInitialized == false {
 		log.Errorf("coffeeMachine cannot be deinitialized more than once")
 		c.JSON(http.StatusBadRequest, "Machine already DeInitialized")

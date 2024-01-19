@@ -61,7 +61,7 @@ info:
     url: https://github.com/kOstovic/coffeemachine/blob/master/LICENSE
   termsOfService: http://swagger.io/terms/
   title: CoffeeMachine Swagger API
-  version: "2.0"
+  version: 'openapi: 3.0.0'
 paths:
   /:
     delete:
@@ -81,6 +81,8 @@ paths:
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: DeInitialize Machine
     post:
       consumes:
@@ -106,6 +108,8 @@ paths:
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Initialize Machine based on given Ingredient and money json
   /drinks:
     delete:
@@ -125,10 +129,14 @@ paths:
             type: boolean
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Remove drink from machine on given name
     get:
       description: Get all drinks available
@@ -167,10 +175,14 @@ paths:
             $ref: '#/definitions/controllers.Drink'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Initialize new drink to consume on given Drink json
   /drinks/activate:
     post:
@@ -190,10 +202,14 @@ paths:
             type: boolean
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Activate drink from machine on given name
   /drinks/consume:
     get:
@@ -256,10 +272,14 @@ paths:
             type: boolean
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Deactivate drink from machine on given name
   /ingredients:
     get:
@@ -278,8 +298,12 @@ paths:
             $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Get ingredient by name from query
     patch:
       consumes:
@@ -302,10 +326,14 @@ paths:
             $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Update ingredients based on given Ingredient json, update only given
     put:
       description: Update ingredients based on given Ingredient name and value in
@@ -333,12 +361,35 @@ paths:
             $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Update ingredients based on given Ingredient name and value in query
         or update all from body
+  /login:
+    post:
+      description: Login to administrator CoffeeMachine
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+        "500":
+          description: ""
+      summary: Login to administrator CoffeeMachine
   /money:
     get:
       description: Get denominations by name from query
@@ -356,8 +407,12 @@ paths:
             $ref: '#/definitions/controllers.Denomination'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Get denominations by name from query
     patch:
       consumes:
@@ -380,10 +435,14 @@ paths:
             $ref: '#/definitions/controllers.Ingredient'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Update ingredients based on given Denomination json, update only given
     put:
       description: Update denomination based on given Denomination name and value
@@ -411,10 +470,19 @@ paths:
             $ref: '#/definitions/controllers.Denomination'
         "400":
           description: ""
+        "401":
+          description: ""
         "404":
           description: ""
         "500":
           description: ""
+      security:
+      - BearerAuth: []
       summary: Update denomination based on given Denomination name and value in query
         or update all from body
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
