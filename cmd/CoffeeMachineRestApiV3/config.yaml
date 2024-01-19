@@ -11,3 +11,6 @@ database:
   initialized: "false"
 log:
   level: "debug"
+auth:
+  username: "admin"
+  password: "mypass"

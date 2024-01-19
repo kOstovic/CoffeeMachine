@@ -11,12 +11,17 @@
             "name": "GNU AFFERO",
             "url": "https://github.com/kOstovic/coffeemachine/blob/master/LICENSE"
         },
-        "version": "2.0"
+        "version": "openapi: 3.0.0"
     },
     "basePath": "/coffeemachine",
     "paths": {
         "/": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Initialize Machine based on given Ingredient and money json",
                 "consumes": [
                     "application/json"
@@ -55,6 +60,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "DeInitialize Machine based",
                 "consumes": [
                     "application/json"
@@ -102,6 +112,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Initialize new drink to consume on given Drink json",
                 "consumes": [
                     "application/json"
@@ -138,6 +153,9 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -147,6 +165,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Remove drink from machine on given name",
                 "produces": [
                     "application/json"
@@ -171,6 +194,9 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -182,6 +208,11 @@
         },
         "/drinks/activate": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Activate drink from machine on given name",
                 "produces": [
                     "application/json"
@@ -204,6 +235,9 @@
                         }
                     },
                     "400": {
+                        "description": ""
+                    },
+                    "401": {
                         "description": ""
                     },
                     "404": {
@@ -282,6 +316,11 @@
         },
         "/drinks/deactivate": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deactivate drink from machine on given name",
                 "produces": [
                     "application/json"
@@ -306,6 +345,9 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -317,6 +359,11 @@
         },
         "/ingredients": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get ingredient by name from query",
                 "produces": [
                     "application/json"
@@ -340,12 +387,20 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update ingredients based on given Ingredient name and value in query or update all from body",
                 "produces": [
                     "application/json"
@@ -383,6 +438,9 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -392,6 +450,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update ingredients based on given Ingredient json, update only given",
                 "consumes": [
                     "application/json"
@@ -421,6 +484,38 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
+                    "404": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Login to administrator CoffeeMachine",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Login to administrator CoffeeMachine",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -432,6 +527,11 @@
         },
         "/money": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get denominations by name from query",
                 "produces": [
                     "application/json"
@@ -455,12 +555,20 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update denomination based on given Denomination name and value in query or update all from body",
                 "produces": [
                     "application/json"
@@ -498,6 +606,9 @@
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -507,6 +618,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update ingredients based on given Denomination json, update only given",
                 "consumes": [
                     "application/json"
@@ -534,6 +650,9 @@
                         }
                     },
                     "400": {
+                        "description": ""
+                    },
+                    "401": {
                         "description": ""
                     },
                     "404": {
@@ -626,6 +745,13 @@
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

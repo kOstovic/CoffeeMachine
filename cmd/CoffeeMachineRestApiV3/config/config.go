@@ -22,6 +22,10 @@ type Config struct {
 	Log struct {
 		LOG_LEVEL string `mapstructure:"level"`
 	} `mapstructure:"log"`
+	Auth struct {
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"`
+	} `mapstructure:"auth"`
 }
 
 func LoadConfig(config *Config) error {
@@ -29,6 +33,7 @@ func LoadConfig(config *Config) error {
 	viper.SetConfigName("config") // Name of the configuration file without extension
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("/bin") // Path to look for the configuration file
+	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
 		return err

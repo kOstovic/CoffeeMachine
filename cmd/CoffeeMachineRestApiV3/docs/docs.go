@@ -33,6 +33,11 @@ var doc = `{
     "paths": {
         "/": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Initialize Machine based on given Ingredient and money json",
                 "consumes": [
                     "application/json"
@@ -71,6 +76,11 @@ var doc = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "DeInitialize Machine based",
                 "consumes": [
                     "application/json"
@@ -118,6 +128,11 @@ var doc = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Initialize new drink to consume on given Drink json",
                 "consumes": [
                     "application/json"
@@ -154,6 +169,9 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -163,6 +181,11 @@ var doc = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Remove drink from machine on given name",
                 "produces": [
                     "application/json"
@@ -187,6 +210,9 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -198,6 +224,11 @@ var doc = `{
         },
         "/drinks/activate": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Activate drink from machine on given name",
                 "produces": [
                     "application/json"
@@ -220,6 +251,9 @@ var doc = `{
                         }
                     },
                     "400": {
+                        "description": ""
+                    },
+                    "401": {
                         "description": ""
                     },
                     "404": {
@@ -298,6 +332,11 @@ var doc = `{
         },
         "/drinks/deactivate": {
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deactivate drink from machine on given name",
                 "produces": [
                     "application/json"
@@ -322,6 +361,9 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -333,6 +375,11 @@ var doc = `{
         },
         "/ingredients": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get ingredient by name from query",
                 "produces": [
                     "application/json"
@@ -356,12 +403,20 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update ingredients based on given Ingredient name and value in query or update all from body",
                 "produces": [
                     "application/json"
@@ -399,6 +454,9 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -408,6 +466,11 @@ var doc = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update ingredients based on given Ingredient json, update only given",
                 "consumes": [
                     "application/json"
@@ -437,6 +500,38 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
+                    "404": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Login to administrator CoffeeMachine",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Login to administrator CoffeeMachine",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "400": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -448,6 +543,11 @@ var doc = `{
         },
         "/money": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get denominations by name from query",
                 "produces": [
                     "application/json"
@@ -471,12 +571,20 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update denomination based on given Denomination name and value in query or update all from body",
                 "produces": [
                     "application/json"
@@ -514,6 +622,9 @@ var doc = `{
                     "400": {
                         "description": ""
                     },
+                    "401": {
+                        "description": ""
+                    },
                     "404": {
                         "description": ""
                     },
@@ -523,6 +634,11 @@ var doc = `{
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update ingredients based on given Denomination json, update only given",
                 "consumes": [
                     "application/json"
@@ -550,6 +666,9 @@ var doc = `{
                         }
                     },
                     "400": {
+                        "description": ""
+                    },
+                    "401": {
                         "description": ""
                     },
                     "404": {
@@ -643,6 +762,13 @@ var doc = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -657,7 +783,7 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "2.0",
+	Version:     "openapi: 3.0.0",
 	Host:        "",
 	BasePath:    "/coffeemachine",
 	Schemes:     []string{},

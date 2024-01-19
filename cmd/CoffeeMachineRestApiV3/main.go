@@ -17,17 +17,18 @@ import (
 )
 
 // @title CoffeeMachine Swagger API
-// @version 2.0
+// @version openapi: 3.0.0
 // @description Swagger API for Golang Project CoffeeMachine.
 // @termsOfService http://swagger.io/terms/
-
 // @contact.name API Support
 // @query.collection.format multi
 // @license.name GNU AFFERO
 // @license.url https://github.com/kOstovic/coffeemachine/blob/master/LICENSE
-
 // @BasePath /coffeemachine
-// Package classification of Product API.
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// Package classification of Product API
 func main() {
 
 	if err := config.LoadConfig(&config.Configuration); err != nil {
@@ -62,6 +63,7 @@ func main() {
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	coffeemachine := router.Group("/coffeemachine")
 	controllers.RegisterRoutesCoffeeMachine(coffeemachine.Group("/"))
+	controllers.RegisterRoutesAuth(coffeemachine.Group("/login"))
 	controllers.RegisterRoutesDrink(coffeemachine.Group("/drinks"))
 	controllers.RegisterRoutesIngredients(coffeemachine.Group("/ingredients"))
 	controllers.RegisterRoutesDenomination(coffeemachine.Group("/money"))

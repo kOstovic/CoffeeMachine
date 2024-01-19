@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "7bec783e-6e83-4275-aeae-65a2bcc18c01",
-		"name": "golang user api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "1fbf7ff5-75f0-45ff-919b-f5df72f66239",
+		"name": "golang coffeeMachine api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3238905"
 	},
 	"item": [
 		{
@@ -11,6 +12,9 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -30,7 +34,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:3000/coffeemachine/drinks?name=tea2&Ten=4",
+					"raw": "http://localhost:3000/coffeemachine/drinks?name=tea&Ten=4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -43,7 +47,7 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "tea2"
+							"value": "tea"
 						},
 						{
 							"key": "Ten",
@@ -61,25 +65,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "name",
-						"type": "text",
-						"value": "tea"
-					},
-					{
-						"key": "ingredient",
-						"type": "text",
-						"value": "Milk",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:3000/coffeemachine/drinks?name=tea2",
+					"raw": "http://localhost:3000/coffeemachine/drinks?name=tea&One=4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,7 +84,11 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "tea2"
+							"value": "tea"
+						},
+						{
+							"key": "One",
+							"value": "4"
 						}
 					]
 				}
@@ -124,7 +120,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:3000/coffeemachine/drinks?name=tea&half=3",
+					"raw": "http://localhost:3000/coffeemachine/drinks?Half=4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -137,11 +133,12 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "tea"
+							"value": "tea",
+							"disabled": true
 						},
 						{
-							"key": "half",
-							"value": "3"
+							"key": "Half",
+							"value": "4"
 						}
 					]
 				}
@@ -154,6 +151,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -199,6 +206,9 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -244,6 +254,9 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -281,26 +294,24 @@
 		{
 			"name": "POST tea http://localhost:3000/coffeemachine/drinks coffee",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
-				"header": [
-					{
-						"key": "name",
-						"value": "tea",
-						"type": "text"
-					},
-					{
-						"key": "ingredient",
-						"value": "Milk",
-						"type": "text",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\"Water\":10,\"Milk\":2,\"Sugar\":4,\"CoffeeBeans\":0,\"TeaBeans\":5,\"Cups\":1,\"Money\":4}\r\n"
 				},
 				"url": {
-					"raw": "http://localhost:3000/coffeemachine/drinks?name=tea",
+					"raw": "http://localhost:3000/coffeemachine/drinks?name=teaa",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -313,7 +324,7 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "tea"
+							"value": "teaa"
 						}
 					]
 				}
@@ -323,6 +334,16 @@
 		{
 			"name": "PATCH Half http://localhost:3000/coffeemachine/money",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [
 					{
@@ -360,6 +381,16 @@
 		{
 			"name": "PUT Half http://localhost:3000/coffeemachine/money",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -446,6 +477,16 @@
 		{
 			"name": "PUT money http://localhost:3000/coffeemachine/money",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -573,6 +614,16 @@
 		{
 			"name": "PATCH Cups http://localhost:3000/coffeemachine/ingredients",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjI0MDY1fQ.aw0qOg-IvyiYBAY9nVF_mesqdqL6MNgZHP6szuJzeBs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PATCH",
 				"header": [
 					{
@@ -590,7 +641,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Cups\":2}\r\n"
+					"raw": "{\"Cups\":2000}\r\n"
 				},
 				"url": {
 					"raw": "http://localhost:3000/coffeemachine/ingredients",
@@ -610,6 +661,16 @@
 		{
 			"name": "PUT Milk http://localhost:3000/coffeemachine/ingredients",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -653,6 +714,16 @@
 		{
 			"name": "PUT foo ingredients http://localhost:3000/coffeemachine/ingredients",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -696,6 +767,16 @@
 		{
 			"name": "PUT http://localhost:3000/coffeemachine/ingredients",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjI0MDY1fQ.aw0qOg-IvyiYBAY9nVF_mesqdqL6MNgZHP6szuJzeBs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -740,6 +821,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjI0MDY1fQ.aw0qOg-IvyiYBAY9nVF_mesqdqL6MNgZHP6szuJzeBs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -786,6 +877,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjI0MDY1fQ.aw0qOg-IvyiYBAY9nVF_mesqdqL6MNgZHP6szuJzeBs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -827,6 +928,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjIzMzM2fQ.tV5UTnPNPnhGYqa55xXJfwfDZ5SSqwweXzUYNu-plWs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -847,12 +958,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:3002/coffeemachine/ingredients",
+					"raw": "http://localhost:3000/coffeemachine/ingredients",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3002",
+					"port": "3000",
 					"path": [
 						"coffeemachine",
 						"ingredients"
@@ -864,6 +975,16 @@
 		{
 			"name": "POST initialize http://localhost:3000/coffeemachine/ingredients",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzA1NjI0MDY1fQ.aw0qOg-IvyiYBAY9nVF_mesqdqL6MNgZHP6szuJzeBs",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -877,60 +998,52 @@
 						"type": "text",
 						"value": "Milk",
 						"disabled": true
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \"Ingredients\": {\"Water\":1000,\"Milk\":200,\"Sugar\":400,\"CoffeeBeans\":100,\"TeaBeans\":500,\"Cups\":50},\r\n\"Money\": {\"Half\":11, \"One\":10, \"Two\":10, \"Five\":10, \"Ten\":10}}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": "{ \"ingredients\": {\"Water\":1000,\"Milk\":200,\"Sugar\":400,\"CoffeeBeans\":100,\"TeaBeans\":500,\"Cups\":50},\r\n\"money\": {\"Half\":11, \"One\":10, \"Two\":10, \"Five\":10, \"Ten\":10}}\r\n\r\n"
 				},
 				"url": {
-					"raw": "http://localhost:3000/coffeemachine/",
+					"raw": "http://localhost:3000/coffeemachine",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"coffeemachine",
-						""
+						"coffeemachine"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "DELETE Deinitialize http://localhost:3000/coffeemachine/ingredients",
+			"name": "Post login",
 			"request": {
-				"method": "DELETE",
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "mypass",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
 				"header": [
-					{
-						"key": "name",
-						"type": "text",
-						"value": "tea",
-						"disabled": true
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
+
 				],
 				"body": {
-					"mode": "raw",
-					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:3000/coffeemachine/",
+					"raw": "http://localhost:3000/coffeemachine/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -938,7 +1051,7 @@
 					"port": "3000",
 					"path": [
 						"coffeemachine",
-						""
+						"login"
 					]
 				}
 			},

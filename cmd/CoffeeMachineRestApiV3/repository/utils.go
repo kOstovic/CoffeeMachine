@@ -95,7 +95,7 @@ func initDatabasePostgres(dbname string) (*gorm.DB, error) {
 		if strings.Contains(err.Error(), "does not exist") && config.Configuration.Database.INITIALIZED == "false" {
 			dbOpen, _ = createDatabasePostgres(dbname)
 		} else {
-			errString := fmt.Sprintf("Database %s does not exist even thought it should exist as INITIALIZED=%s "+err.Error(), dbname, config.Configuration.Database.INITIALIZED)
+			errString := fmt.Sprintf("Cannot connect to database or database %s does not exist even thought it should exist as INITIALIZED=%s "+err.Error(), dbname, config.Configuration.Database.INITIALIZED)
 			log.Fatal(errString)
 			panic(errString)
 		}

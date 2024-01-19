@@ -45,8 +45,14 @@ func putDenomination(c *gin.Context) {
 // @Description Get all denominations available
 // @Produce json
 // @Success 200 {object} Denomination
+// @Failure 400,401,404
 // @Router /money [get]
+// @Security BearerAuth
 func getAllAvailableDenomination(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	c.JSON(http.StatusOK, repository.GetCurrentMoney())
 }
 
@@ -56,9 +62,14 @@ func getAllAvailableDenomination(c *gin.Context) {
 // @Param name query string false "name of denomination to get"
 // @Produce json
 // @Success 200 {object} Denomination
-// @Failure 400,404
+// @Failure 400,401,404
 // @Router /money [get]
+// @Security BearerAuth
 func getDenominationByName(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	cm, err := repository.GetDenominationValueByName(name)
 	if err != nil {
@@ -76,10 +87,15 @@ func getDenominationByName(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} Denomination
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /money [put]
+// @Security BearerAuth
 func putAllDenomination(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	cm, err := checkDenFromBody(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
@@ -105,10 +121,15 @@ func putAllDenomination(c *gin.Context) {
 // @Param denomination body Denomination false "Update Denomination object with Put option"
 // @Produce json
 // @Success 200 {object} Denomination
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /money [put]
+// @Security BearerAuth
 func putDenominationByName(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	name := c.Query("name")
 	valueStr := c.Query("value")
 	if name == "" || valueStr == "" {
@@ -140,10 +161,15 @@ func putDenominationByName(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} Ingredient
-// @Failure 400,404
+// @Failure 400,401,404
 // @Failure 500
 // @Router /money [patch]
+// @Security BearerAuth
 func patchDenomination(c *gin.Context) {
+	if code, err := parseToken(c); err != nil {
+		c.JSON(code, err.Error())
+		return
+	}
 	cm, err := checkDenFromBody(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
