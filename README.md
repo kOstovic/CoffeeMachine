@@ -1,6 +1,3 @@
-<CoffeeMachine PoC software in golang>
-Copyright (C) <2024>  <Krešimir Ostović>
-
 # CoffeeMachine
 CoffeeMachine Rest API and Console APP implementation in GoLang used for learning GoLang and some devops techniques.
 
@@ -67,8 +64,6 @@ auth:
   username: "admin"
   password: "mypass"
 ```
-
-
 
 ## Docker
 
@@ -184,7 +179,7 @@ Denomination struct {
 
 With low usage max MEM usage is around 30Mi and up to 1% CPU. GC doesnt seem to be active on low usage.
 
-
+# License
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
