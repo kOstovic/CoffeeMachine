@@ -52,7 +52,7 @@ func getAllAvailableDrinks(c *gin.Context) {
 	c.JSON(http.StatusOK, drinks)
 }
 
-// ConsumeDrink godoc
+// getConsumeDrink godoc
 // @Summary Consumes Drink over
 // @Description Consumes Drink over
 // @Param name query string true "Name of drink to consume"
@@ -76,18 +76,26 @@ func getConsumeDrink(c *gin.Context) {
 		return
 	}
 
-	check, denRet, err := repository.GetConsumeDrink(name, denominationParam)
+	check, denRet, DrinkConsumed, err := repository.GetConsumeDrink(name, denominationParam)
 	if !check || err != nil {
 		c.JSON(checkErrCode(err), err.Error())
 		log.Debugf("Could not consume drink called %v because of error: %v", name, err.Error())
 		return
 	} else {
 		log.Infof("Consumed drink called %v", name)
+		DrinkConsumedCounter.WithLabelValues(name).Inc()
+		IngredientsConsumedCounter.WithLabelValues("CoffeeBeans").Add(float64(DrinkConsumed.CoffeeBeans))
+		IngredientsConsumedCounter.WithLabelValues("Cups").Add(float64(DrinkConsumed.Cups))
+		IngredientsConsumedCounter.WithLabelValues("Milk").Add(float64(DrinkConsumed.Milk))
+		IngredientsConsumedCounter.WithLabelValues("Sugar").Add(float64(DrinkConsumed.Sugar))
+		IngredientsConsumedCounter.WithLabelValues("TeaBeans").Add(float64(DrinkConsumed.TeaBeans))
+		IngredientsConsumedCounter.WithLabelValues("Water").Add(float64(DrinkConsumed.Water))
+		MoneyEarnedCounter.Add(DrinkConsumed.Money)
 		c.JSON(http.StatusOK, denRet)
 	}
 }
 
-// AddDrink godoc
+// postAddDrink godoc
 // @Summary Initialize new drink to consume on given Drink json
 // @Description Initialize new drink to consume on given Drink json
 // @Param name query string true "name of drink to create"
@@ -123,11 +131,12 @@ func postAddDrink(c *gin.Context) {
 		return
 	} else {
 		log.Infof("Added drink with params:  %v", drinkDB)
+		DrinksActiveCounter.Inc()
 		c.JSON(http.StatusOK, drinkDB)
 	}
 }
 
-// ActivateDrink godoc
+// postActivateDrink godoc
 // @Summary Activate drink from machine on given name
 // @Description Activate drink from machine on given name
 // @Param name query string true "name of drink to activate"
@@ -155,11 +164,12 @@ func postActivateDrink(c *gin.Context) {
 		return
 	} else {
 		log.Infof("Activated drink called %v", name)
+		DrinksActiveCounter.Inc()
 		c.JSON(http.StatusOK, OK)
 	}
 }
 
-// DeactivateDrink godoc
+// deleteDeactivateDrink godoc
 // @Summary Deactivate drink from machine on given name
 // @Description Deactivate drink from machine on given name
 // @Param name query string true "name of drink to deactivate"
@@ -187,11 +197,12 @@ func deleteDeactivateDrink(c *gin.Context) {
 		return
 	} else {
 		log.Infof("Deactivated drink called %v", name)
+		DrinksActiveCounter.Dec()
 		c.JSON(http.StatusOK, OK)
 	}
 }
 
-// RemoveDrink godoc
+// deleteRemoveDrink godoc
 // @Summary Remove drink from machine on given name
 // @Description Remove drink from machine on given name
 // @Param name query string true "name of drink to delete"
@@ -219,6 +230,7 @@ func deleteRemoveDrink(c *gin.Context) {
 		return
 	} else {
 		log.Infof("Removed drink called %v", name)
+		DrinksActiveCounter.Dec()
 		c.JSON(http.StatusOK, OK)
 	}
 }

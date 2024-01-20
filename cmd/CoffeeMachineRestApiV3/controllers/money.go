@@ -80,7 +80,7 @@ func getDenominationByName(c *gin.Context) {
 	}
 }
 
-// putDenomination godoc
+// putAllDenomination godoc
 // @Summary Update Denomination based on given Denomination json, updates all
 // @Description Update Denomination based on given Denomination json, updates all
 // @Param denomination body Denomination true "Update Denomination object with Put option"

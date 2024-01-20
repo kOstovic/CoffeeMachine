@@ -46,6 +46,18 @@ func initIngredientDatabase(wg *sync.WaitGroup) {
 	DbIngredient, _ = initDatabase(config.Configuration.Database.DBNAME_INGREDIENT)
 
 	DbIngredient.AutoMigrate(&models.IngredientDB{})
+
+	if MachineInitialized {
+		var ingredientDB models.IngredientDB
+		if err := DbIngredient.Where("tenant_name = ?", "").First(&ingredientDB).Error; err != nil {
+			log.Fatalf("Could not update in-memory ingredients from database initialization because of error: " + err.Error())
+		}
+
+		_, err := models.UpdateIngredientPut(ingredientDB.ConvertIngredientDBToIngredient())
+		if err != nil {
+			log.Fatalf("Could not update in-memory ingredients from database initialization because of error: " + err.Error())
+		}
+	}
 	log.Debug("Ingredient Database initialized")
 	defer wg.Done()
 }
@@ -53,8 +65,19 @@ func initIngredientDatabase(wg *sync.WaitGroup) {
 func initDenominationDatabase(wg *sync.WaitGroup) {
 	DbDenomination, _ = initDatabase(config.Configuration.Database.DBNAME_DENOMINATION)
 
-	log.Debug("Denomination Database initialized")
 	DbDenomination.AutoMigrate(&models.DenominationDB{})
+	if MachineInitialized {
+		var denominationDB models.DenominationDB
+		if err := DbDenomination.Where("tenant_name = ?", "").First(&denominationDB).Error; err != nil {
+			log.Fatalf("Could not update in-memory denomination from database initialization because of error: " + err.Error())
+		}
+
+		_, err := models.UpdateDenominationPut(denominationDB.ConvertDenominationDBToDenomination())
+		if err != nil {
+			log.Fatalf("Could not update in-memory denomination from database initialization because of error: " + err.Error())
+		}
+	}
+	log.Debug("Denomination Database initialized")
 	defer wg.Done()
 }
 

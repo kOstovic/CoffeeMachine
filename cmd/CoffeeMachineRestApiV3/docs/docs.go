@@ -679,6 +679,28 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/statistics": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Statistics endpoint (metrics)",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Statistics endpoint (metrics)",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": ""
+                    }
+                }
+            }
         }
     },
     "definitions": {

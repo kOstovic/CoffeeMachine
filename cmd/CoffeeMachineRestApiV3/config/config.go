@@ -1,6 +1,8 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/spf13/viper"
 )
 
@@ -29,12 +31,12 @@ type Config struct {
 }
 
 func LoadConfig(config *Config) error {
-	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(`.`, `_`))
 	viper.SetConfigName("config") // Name of the configuration file without extension
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("/bin") // Path to look for the configuration file
 	viper.AddConfigPath(".")
-
+	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		return err
 	}

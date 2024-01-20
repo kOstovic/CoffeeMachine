@@ -20,7 +20,14 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// Login godoc
+func RegisterRoutesAuth(router *gin.RouterGroup) {
+
+	router.POST("/", gin.BasicAuth(gin.Accounts{
+		config.Configuration.Auth.USERNAME: config.Configuration.Auth.PASSWORD,
+	}), tokenEndpoint)
+}
+
+// tokenEndpoint godoc
 // @Summary Login to administrator CoffeeMachine
 // @Description Login to administrator CoffeeMachine
 // @Produce json
@@ -31,13 +38,6 @@ type Claims struct {
 // @in header
 // @name Authorization
 // @Router /login [post]
-func RegisterRoutesAuth(router *gin.RouterGroup) {
-
-	router.POST("/", gin.BasicAuth(gin.Accounts{
-		config.Configuration.Auth.USERNAME: config.Configuration.Auth.PASSWORD,
-	}), tokenEndpoint)
-}
-
 func tokenEndpoint(c *gin.Context) {
 	user, userExist := c.Get(gin.AuthUserKey)
 	if !userExist {
@@ -60,7 +60,12 @@ func parseToken(c *gin.Context) (int, error) {
 		log.Warnf("No Bearer token provided")
 		return http.StatusUnauthorized, fmt.Errorf("No Bearer token provided")
 	}
-	reqToken := strings.Split(bearerToken, " ")[1]
+	parsedBearer := strings.Split(bearerToken, " ")
+	if len(parsedBearer) <= 1 {
+		log.Warnf("Malformed Bearer token provided")
+		return http.StatusUnauthorized, fmt.Errorf("Malformed Bearer token provided")
+	}
+	reqToken := parsedBearer[1]
 	claims := &Claims{}
 	tkn, err := jwt.ParseWithClaims(reqToken, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
