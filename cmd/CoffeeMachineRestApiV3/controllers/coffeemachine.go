@@ -37,7 +37,7 @@ func RegisterRoutesCoffeeMachine(router *gin.RouterGroup) {
 	}
 }
 
-// InitializeMachine godoc
+// postInitializeMachine godoc
 // @Summary Initialize Machine based on given Ingredient and money json
 // @Description Initialize Machine based on given Ingredient and money json
 // @Param CoffeeMachine body CoffeeMachine true "init CoffeeMachine object"

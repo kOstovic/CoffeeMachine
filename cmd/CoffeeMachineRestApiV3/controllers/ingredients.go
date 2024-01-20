@@ -81,7 +81,7 @@ func getIngredientsByName(c *gin.Context) {
 	}
 }
 
-// putIngredients godoc
+// putAllIngredients godoc
 // @Summary Update ingredients based on given Ingredient json, updates all
 // @Description Update ingredients based on given Ingredient json, updates all
 // @Param ingredient body Ingredient false "Update Ingredient object with Put option"

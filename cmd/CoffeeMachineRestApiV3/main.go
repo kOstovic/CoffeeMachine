@@ -60,19 +60,33 @@ func main() {
 	router.Use(gin.LoggerWithWriter(log.StandardLogger().WriterLevel(log.DebugLevel)))
 	router.Use(gin.Recovery())
 
-	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	coffeemachine := router.Group("/coffeemachine")
+	coffeemachine.Use(controllers.PrometheusMiddleware())
 	controllers.RegisterRoutesCoffeeMachine(coffeemachine.Group("/"))
+	controllers.RegisterRoutesStatistics(coffeemachine.Group("/statistics"))
 	controllers.RegisterRoutesAuth(coffeemachine.Group("/login"))
 	controllers.RegisterRoutesDrink(coffeemachine.Group("/drinks"))
 	controllers.RegisterRoutesIngredients(coffeemachine.Group("/ingredients"))
 	controllers.RegisterRoutesDenomination(coffeemachine.Group("/money"))
 	router.GET("/coffeemachine/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	//health test
+	// health endpoint
+	// @Summary health endpoint
+	// @Description health endpoint for liveness probe
+	// @Produce plain
+	// @Router /coffeemachine/health [get]
 	coffeemachine.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")
 	})
+	// Prometheus metrics endpoint
+	// @Summary Expose Prometheus metrics
+	// @Description Expose Prometheus metrics for monitoring
+	// @Produce plain
+	// @Router /metrics [get]
+	router.GET("/metrics", func(c *gin.Context) {
+		promhttp.Handler().ServeHTTP(c.Writer, c.Request)
+	})
+
 	//router := controllers.SetupRouter()
 	// Listen and Server in 0.0.0.0:3000
 	router.Run(":3000")

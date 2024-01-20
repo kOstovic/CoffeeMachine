@@ -95,28 +95,28 @@ func ActivateDrink(name string) (bool, error) {
 	return true, nil
 }
 
-func GetConsumeDrink(name string, den models.Denomination) (bool, models.Denomination, error) {
+func GetConsumeDrink(name string, den models.Denomination) (bool, models.Denomination, models.Drink, error) {
 	var drinkDB models.DrinkDB
 	var denRet models.Denomination
 	if err := DbDrinks.Where("name = ? AND tenant_name = ?", name, "").First(&drinkDB).Error; err != nil {
 		log.Errorf("Failed to retrieve drinks: %s", err)
-		return false, den, fmt.Errorf("Drink does not exist")
+		return false, den, models.Drink{}, fmt.Errorf("Drink does not exist")
 	}
 
 	resourcePrereq, cost, newIng, err := drinkDB.CheckResourcePrereqForDrinkDB()
 	if err != nil {
-		log.Debugf("Cannot not consume drink called %v because of error: %v: "+err.Error(), name)
-		return false, den, err
+		log.Debugf("Cannot not consume drink called %v because of error: "+err.Error(), name)
+		return false, den, models.Drink{}, err
 	}
 	if !resourcePrereq {
 		log.Debugf("CoffeeMachine does not have enough resources for %v drink", name)
-		return false, den, nil
+		return false, den, models.Drink{}, nil
 	}
 
 	newDen, err := models.CalculateDenominationAfterConsume(den, cost)
 	if err != nil {
 		log.Debugf("Cannot not consume drink called %v because of error: "+err.Error(), name)
-		return false, den, err
+		return false, den, models.Drink{}, err
 	}
 
 	txErr := DbDenomination.Transaction(func(txDenomination *gorm.DB) error {
@@ -135,12 +135,12 @@ func GetConsumeDrink(name string, den models.Denomination) (bool, models.Denomin
 			}
 			denRet, err = models.UpdateDenominationConsume(den, cost)
 			if err != nil {
-				log.Debugf("Could not consume drink called %v because of error: %v", name, err.Error())
+				log.Debugf("Could not consume drink called %v because of error: "+err.Error(), name)
 				return err
 			}
 			check, err := drinkDB.ConsumeDrinkDB()
 			if !check || err != nil {
-				log.Debugf("Could not consume drink called %v because of error: %v", name, err.Error())
+				log.Debugf("Could not consume drink called %v because of error: "+err.Error(), name)
 				return err
 			}
 			return nil
@@ -153,9 +153,9 @@ func GetConsumeDrink(name string, den models.Denomination) (bool, models.Denomin
 	})
 	if txErr != nil {
 		log.Debugf("Could not consume drink called %v because of error: %v", name, txErr.Error())
-		return false, den, fmt.Errorf("Could not consume drink called %v because of error: %v", name, txErr.Error())
+		return false, den, models.Drink{}, fmt.Errorf("Could not consume drink called %v because of error: %v", name, txErr.Error())
 	}
 
 	log.Debugf("Consumed drink called %v saved in repository layer", name)
-	return true, denRet, nil
+	return true, denRet, drinkDB.ConvertDrinkDBToDrink(), nil
 }

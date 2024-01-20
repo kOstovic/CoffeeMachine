@@ -480,6 +480,19 @@ paths:
       - BearerAuth: []
       summary: Update denomination based on given Denomination name and value in query
         or update all from body
+  /statistics:
+    get:
+      description: Statistics endpoint (metrics)
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      security:
+      - BearerAuth: []
+      summary: Statistics endpoint (metrics)
 securityDefinitions:
   BearerAuth:
     in: header
